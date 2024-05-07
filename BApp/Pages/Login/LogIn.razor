@@ -1,0 +1,45 @@
+﻿@page "/login"
+
+@using BApp.Components
+@using BApp.Domain.DTOs
+@using BApp.Components.InputFields
+@using Microsoft.Extensions.Logging
+
+
+@layout LogInLayout
+
+<div class="login-fields-container">
+    <EditForm class="login-form" Model="User" FormName="LoginForm">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputTextComponent Label="Username" InputType="text" Value=@User.Username />
+        <InputTextComponent Label="Password" InputType="password" Value=@User.Password />
+
+        <div class="login-submit-container">
+            <ButtonComponent CssClass="login" Label="Login" ButtonType="submit" />
+            <div class="no-account">
+                You don't have an account?
+                <button class="signup-button" onclick="@RedirectToLoginPage"> Sign Up</button>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    private UserDTO? User { get; set; }
+
+    protected override void OnInitialized()
+    {
+        User ??=
+            new UserDTO();
+    }
+
+    private void RedirectToLoginPage()
+    {
+
+    }
+}

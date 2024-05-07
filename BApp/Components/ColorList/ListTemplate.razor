@@ -1,0 +1,65 @@
+﻿@page "/counter"
+
+
+<div class="container">
+    <div class="user-info-container">
+        <div>Total discovered: 25 </div>
+        <div>Total xp: 150.000</div>
+    </div>
+    <div class="list-container">
+        <div class="row">
+            @foreach (var listItem in ListItems)
+            {
+                <div class="col-md-3 mb-5 py-3">
+                    <ListItem Title="@listItem.Title" HexColor="@listItem.HexColor" Date="@listItem.Date" Xp="@listItem.Xp" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    public class ListItemModel
+    {
+        public string Title { get; set; }
+        public string HexColor { get; set; }
+        public DateTime Date { get; set; }
+        public int Xp { get; set; }
+    }
+
+    private List<ListItemModel> ListItems { get; set; }
+
+    // In your ListPage component, create a list of mock ListItems
+    private List<ListItemModel> GetMockListItems()
+    {
+        return new List<ListItemModel>
+    {
+        new ListItemModel { Title = "Item 1", HexColor = "#F70746", Date = DateTime.Now.AddDays(-1), Xp = 100 },
+        new ListItemModel { Title = "Item 2", HexColor = "#33FF57", Date = DateTime.Now.AddDays(-2), Xp = 200 },
+        new ListItemModel { Title = "Item 3", HexColor = "#5733FF", Date = DateTime.Now.AddDays(-3), Xp = 300 },
+        new ListItemModel { Title = "Item 4", HexColor = "#FF5733", Date = DateTime.Now.AddDays(-4), Xp = 400 },
+        new ListItemModel { Title = "Item 5", HexColor = "#33FF57", Date = DateTime.Now.AddDays(-5), Xp = 500 },
+        new ListItemModel { Title = "Item 6", HexColor = "#5733FF", Date = DateTime.Now.AddDays(-6), Xp = 600 },
+        new ListItemModel { Title = "Item 7", HexColor = "#F70746", Date = DateTime.Now.AddDays(-7), Xp = 700 },
+        new ListItemModel { Title = "Item 8", HexColor = "#33FF57", Date = DateTime.Now.AddDays(-8), Xp = 800 },
+                new ListItemModel { Title = "Item 1", HexColor = "#F70746", Date = DateTime.Now.AddDays(-1), Xp = 100 },
+        new ListItemModel { Title = "Item 2", HexColor = "#33FF57", Date = DateTime.Now.AddDays(-2), Xp = 200 },
+        new ListItemModel { Title = "Item 3", HexColor = "#5733FF", Date = DateTime.Now.AddDays(-3), Xp = 300 },
+        new ListItemModel { Title = "Item 4", HexColor = "#FF5733", Date = DateTime.Now.AddDays(-4), Xp = 400 },
+        new ListItemModel { Title = "Item 5", HexColor = "#33FF57", Date = DateTime.Now.AddDays(-5), Xp = 500 },
+        new ListItemModel { Title = "Item 6", HexColor = "#5733FF", Date = DateTime.Now.AddDays(-6), Xp = 600 },
+        new ListItemModel { Title = "Item 7", HexColor = "#F70746", Date = DateTime.Now.AddDays(-7), Xp = 700 },
+        new ListItemModel { Title = "Item 8", HexColor = "#33FF57", Date = DateTime.Now.AddDays(-8), Xp = 800 },
+        // Add more mock data as needed
+    };
+    }
+
+    // In the OnInitializedAsync method, use the mock data
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch the list of mock ListItems
+        ListItems = GetMockListItems();
+    }
+}

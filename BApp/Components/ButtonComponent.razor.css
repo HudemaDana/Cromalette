@@ -1,0 +1,25 @@
+﻿.button-container {
+    padding: 1rem;
+    margin: 0.25rem;
+}
+
+.custom-button {
+    border-radius: 3px;
+    background-color: #92ADF9;
+    color: black;
+    border: none;
+    height: 2.5rem;
+    width: 8rem;
+}
+
+    .custom-button.clicked {
+        background-color: #1e1e1e;
+        color: white;
+    }
+
+    .custom-button.login {
+        background-color: #F6775B;
+        height: 3.5rem;
+        width: 10rem;
+        padding-bottom: 0px !important;
+    }

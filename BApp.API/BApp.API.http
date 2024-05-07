@@ -1,0 +1,6 @@
+@BApp.API_HostAddress = http://localhost:5108
+
+GET {{BApp.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

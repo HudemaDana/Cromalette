@@ -1,0 +1,19 @@
+﻿.input-container {
+    padding: 2rem;
+    margin: 0.5rem;
+}
+
+::deep .custom-input {
+    width: 25vw;
+    height: 8vh;
+    display: block;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 40px 8px 20px;
+    background-color: #EAEAEA;
+    opacity: 0.6;
+}
+
+::deep .custom-input:focus-visible{
+    outline:none;
+}

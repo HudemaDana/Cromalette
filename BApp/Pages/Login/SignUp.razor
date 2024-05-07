@@ -1,0 +1,54 @@
+﻿@page "/signup"
+
+@using BApp.Components
+@using BApp.Components.InputFields
+@using BApp.Domain.DTOs
+
+@layout LogInLayout
+
+<div class="signup-fields-container">
+    <EditForm class="signup-form" Model="User" FormName="SignUpForm">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="user-details-container">
+            <div class="first-column">
+                <InputTextComponent Label="First Name" InputType="text" Value=@User.FirstName />
+                <InputTextComponent Label="Last Name" InputType="text" Value=@User.LastName />
+                <InputTextComponent Label="Username" InputType="text" Value=@User.Username />
+            </div>
+
+            <div class="second-column">
+                <InputTextComponent Label="Email" InputType="email" Value=@User.Email />
+                <InputTextComponent Label="Password" InputType="password" Value=@User.Password />
+            </div>
+        </div>
+
+        <div class="signup-submit-container">
+            <ButtonComponent CssClass="login signup" Label="Sign Up" ButtonType="submit" />
+            <div class="already-signup">
+                You already have an account?
+                <button class="login-button" onclick="@RedirectToLoginPage"> Log In</button>
+            </div>
+        </div>
+
+    </EditForm>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    private UserDTO? User { get; set; }
+
+    protected override void OnInitialized()
+    {
+        User ??=
+            new UserDTO();
+    }
+
+    private void RedirectToLoginPage()
+    {
+
+    }
+}

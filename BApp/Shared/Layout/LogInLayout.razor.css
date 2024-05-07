@@ -1,0 +1,39 @@
+﻿.page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.sidebar {
+    background: black;
+}
+
+
+.content {
+    padding: 0px !important;
+    background: linear-gradient(to bottom, #92ADF9 0%, #98DCF9 50%, #ffffff 90%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.card {
+    width: 70%;
+    height: 90%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+@media (min-width: 641px) {
+    .page {
+        flex-direction: row;
+    }
+}

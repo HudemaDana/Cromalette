@@ -1,0 +1,30 @@
+﻿.login-fields-container {
+    height: 100%;
+}
+
+::deep .login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: inherit;
+    padding: 3rem 0rem;
+}
+
+.login-submit-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-account {
+    font-size: 8px;
+    padding: 0rem 0.75rem;
+}
+
+.signup-button {
+    border: none;
+    background: transparent;
+    color: #F6775B;
+}

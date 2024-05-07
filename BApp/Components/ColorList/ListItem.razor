@@ -1,0 +1,88 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div class="list-item-container"
+     draggable="true"
+     @ondragstart="DragStart"
+     @ondragover="DragOver"
+     @ondrop="Drop"
+     @onclick="RedirectToPage"
+     style="box-shadow: 24px 24px 0 0 rgba(@RGBColor.R, @RGBColor.G, @RGBColor.B, 0.4);">
+
+     <div class="upper-section">
+        <div class="color" style="background-color: @HexColor;" />
+    </div>
+
+    <div class="lower-section">
+        <div class="color-info">
+            <div class="title">@Title</div>
+            <div class="date">@Date.ToString("dd/MM/yyyy")</div>
+        </div>
+        <div class="xp">@Xp XP</div>
+    </div>
+
+</div>
+
+@code {
+    // [Parameter, EditorRequired]
+    // public Color color { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string HexColor { get; set; }
+
+    [Parameter]
+    public DateTime Date { get; set; }
+
+    [Parameter]
+    public int Xp { get; set; }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
+    private (int R, int G, int B) RGBColor { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // Convert hex color to RGB
+        RGBColor = HexToRgb(HexColor);
+    }
+
+    private void RedirectToPage()
+    {
+        // Navigate to the desired page
+        NavigationManager.NavigateTo("/otherpage");
+    }
+
+    private (int, int, int) HexToRgb(string hex)
+    {
+        // Remove '#' if present
+        hex = hex.TrimStart('#');
+
+        // Convert hex to RGB
+        int r = Convert.ToInt32(hex.Substring(0, 2), 16);
+        int g = Convert.ToInt32(hex.Substring(2, 2), 16);
+        int b = Convert.ToInt32(hex.Substring(4, 2), 16);
+
+        return (r, g, b);
+    }
+
+    private async Task DragStart(DragEventArgs e)
+    {
+        // Call JavaScript function to set data during drag start
+        await JSRuntime.InvokeVoidAsync("dragStart", e);
+    }
+
+    private async Task DragOver(DragEventArgs e)
+    {
+        // Call JavaScript function to allow drop
+        await JSRuntime.InvokeVoidAsync("dragOver", e);
+    }
+
+    private async Task Drop(DragEventArgs e)
+    {
+        // Call JavaScript function to handle drop
+        await JSRuntime.InvokeVoidAsync("drop", e);
+    }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BApp</title>
+    <base href="/" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="BApp.styles.css" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 75 20' style="height: 100%;">
+            <rect fill='#85B1FF' stroke='#85B1FF' stroke-width='1' width='4' height='4' x='12.5' y='8'>
+                <animate attributeName='y' calcMode='spline' dur='2' values='8;20;8;' keySplines='.5 0 .5 1;.5 0 .5 1' repeatCount='indefinite' begin='-.4'></animate>
+            </rect>
+            <rect fill='#85B1FF' stroke='#85B1FF' stroke-width='1' width='4' height='4' x='22.5' y='8'>
+                <animate attributeName='y' calcMode='spline' dur='2' values='8;20;8;' keySplines='.5 0 .5 1;.5 0 .5 1' repeatCount='indefinite' begin='-.2'></animate>
+            </rect>
+            <rect fill='#85B1FF' stroke='#85B1FF' stroke-width='1' width='4' height='4' x='32.5' y='8'>
+                <animate attributeName='y' calcMode='spline' dur='2' values='8;20;8;' keySplines='.5 0 .5 1;.5 0 .5 1' repeatCount='indefinite' begin='0'></animate>
+            </rect>
+        </svg>       
+        <div class="loading-progress-text"> Loading ...</div>
+    </div>
+
+    <script src="_framework/blazor.webassembly.js"></script>
+</body>
+
+</html>
