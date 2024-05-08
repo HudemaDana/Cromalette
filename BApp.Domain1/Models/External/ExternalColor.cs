@@ -4,6 +4,7 @@ namespace BApp.Domain.Models.External
 {
     public class ExternalColor
     {
+        public int Id { get; set; }
         public HexDTO Hex { get; set; }
         public RGBDTO Rgb { get; set; }
         public HSLDTO Hsl { get; set; }

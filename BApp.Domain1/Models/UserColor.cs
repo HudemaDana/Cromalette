@@ -1,6 +1,5 @@
 ﻿using BApp.Domain.Enums;
 using BApp.Domain.Models.External;
-using System;
 
 namespace BApp.Domain.Models
 {

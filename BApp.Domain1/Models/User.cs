@@ -16,7 +16,7 @@ namespace BApp.Domain.Models
 
         public string Password { get; set; }
 
-        public Level Level { get; set; }
+        public UserLevel UserLevel { get; set; }
 
         public List<UserColor> UserColors { get; set; }
     }
