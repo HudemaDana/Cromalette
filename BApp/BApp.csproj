@@ -16,4 +16,8 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BApp.Service1\BApp.Services.csproj" />
+  </ItemGroup>
+
 </Project>
