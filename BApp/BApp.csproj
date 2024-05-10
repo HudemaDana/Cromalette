@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BApp.Service1\BApp.Services.csproj" />
+    <ProjectReference Include="..\BApp.Domain1\BApp.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,17 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BApp", "BApp\BApp.csproj", "{EDC1D586-7022-4E80-8411-EA667DA67B30}"
-	ProjectSection(ProjectDependencies) = postProject
-		{D1520694-EBD5-49FE-86B3-338B0B7CAA06} = {D1520694-EBD5-49FE-86B3-338B0B7CAA06}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BApp.DataAccess", "BApp.DataAccess\BApp.DataAccess.csproj", "{55F8EE9A-4A23-4247-96A8-F0757150878E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BApp.API", "BApp.API\BApp.API.csproj", "{D1520694-EBD5-49FE-86B3-338B0B7CAA06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BApp.Domain", "BApp.Domain1\BApp.Domain.csproj", "{116AFF1C-E717-477E-8F34-39870036F8ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BApp.Domain", "BApp.Domain1\BApp.Domain.csproj", "{116AFF1C-E717-477E-8F34-39870036F8ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BApp.Services", "BApp.Service1\BApp.Services.csproj", "{E7C2C9EC-2BF7-4D26-A0E2-30CADE8117B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BApp.Services", "BApp.Service1\BApp.Services.csproj", "{E7C2C9EC-2BF7-4D26-A0E2-30CADE8117B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

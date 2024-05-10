@@ -1,5 +1,4 @@
-﻿using BApp.Domain.DTOs.External;
-using BApp.Domain.Enums;
+﻿using BApp.Domain.Enums;
 using System;
 
 namespace BApp.Domain.DTOs
@@ -12,6 +11,6 @@ namespace BApp.Domain.DTOs
 
         public DateTime SavingDate { get; set; }
 
-        public ExternalColorDTO ExternalColor { get; set; }
+        public string ColorHexValue { get; set; }
     }
 }
