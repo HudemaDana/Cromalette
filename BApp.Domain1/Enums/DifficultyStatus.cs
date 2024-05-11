@@ -2,12 +2,15 @@
 {
     public enum DifficultyStatus
     {
-        Easy = 0,
-        Medium = 1,
-        Hard = 2,
-        Extreme = 3,
+        None = 0,
 
 
-        Unknown = 100,
+        Easy = 50,
+        Medium = 100,
+        Hard = 200,
+        Rare = 250,
+
+
+        Unknown = 1000,
     }
 }

@@ -3,25 +3,28 @@
 @using BApp.Components
 @using BApp.Components.InputFields
 @using BApp.Domain.DTOs
+@using BApp.Domain.Models
+@using BApp.Services
 
 @layout LogInLayout
 
 <div class="signup-fields-container">
-    <EditForm class="signup-form" Model="User" FormName="SignUpForm">
+    <EditForm class="signup-form" Model="SignUpModel" FormName="SignUpForm" OnValidSubmit="HandleSubmit">
 
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <div class="user-details-container">
             <div class="first-column">
-                <InputTextComponent Label="First Name" InputType="text" Value=@User.FirstName />
-                <InputTextComponent Label="Last Name" InputType="text" Value=@User.LastName />
-                <InputTextComponent Label="Username" InputType="text" Value=@User.Username />
+                <InputTextComponent Label="First Name" InputType="text" Value=@SignUpModel.FirstName />
+                <InputTextComponent Label="Last Name" InputType="text" Value=@SignUpModel.LastName />
+                <InputTextComponent Label="Username" InputType="text" Value=@SignUpModel.Username />
             </div>
 
             <div class="second-column">
-                <InputTextComponent Label="Email" InputType="email" Value=@User.Email />
-                <InputTextComponent Label="Password" InputType="password" Value=@User.Password />
+                <InputTextComponent Label="Email" InputType="email" Value=@SignUpModel.Email />
+                <InputTextComponent Label="Password" InputType="password" Value=@SignUpModel.Password />
+                <InputTextComponent Label="Confirm Password" InputType="password" Value=@SignUpModel.ConfirmPassword />
             </div>
         </div>
 
@@ -37,14 +40,16 @@
 </div>
 
 @code {
-
     [SupplyParameterFromForm]
-    private UserDTO? User { get; set; }
+    private SignUpDTO SignUpModel { get; set; } = new SignUpDTO();
 
     protected override void OnInitialized()
     {
-        User ??=
-            new UserDTO();
+    }
+
+    private async Task HandleSubmit()
+    {
+        await UserService.CreateUser(SignUpModel);
     }
 
     private void RedirectToLoginPage()

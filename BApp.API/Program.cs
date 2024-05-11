@@ -1,4 +1,6 @@
 using BApp.DataAccess.Data;
+using BApp.Services;
+using BApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -21,12 +23,10 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-//builder.Services.AddScoped<IClientService, ClientService>();
-//builder.Services.AddScoped<ITeamLeaderService, TeamLeaderService>();
-//builder.Services.AddScoped<IUserService, UserService>();
-//builder.Services.AddScoped<ITripService, TripService>();
-
+builder.Services.AddScoped<IColorService, ColorService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserColorService, UserColorService>();
+builder.Services.AddScoped<IUserLevelService, UserLevelService>();
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 var app = builder.Build();

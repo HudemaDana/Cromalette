@@ -7,7 +7,5 @@
         public int LevelName { get; set; }
 
         public int LevelTotalXP { get; set; }
-
-        public int CurrentXP { get; set; }
     }
 }
