@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 
 namespace BApp.Services
 {
-    public partial class UserLevelService : IUserLevelService
+    public class UserLevelService : IUserLevelService
     {
         private readonly HttpClient _httpClient;
 

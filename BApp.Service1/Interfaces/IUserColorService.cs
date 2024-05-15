@@ -1,4 +1,5 @@
-﻿using BApp.Domain.Models;
+﻿using BApp.Domain.DTOs;
+using BApp.Domain.Models;
 
 namespace BApp.Services.Interfaces
 {
@@ -7,6 +8,6 @@ namespace BApp.Services.Interfaces
         Task<List<UserColor>> GetAllUserColors();
         Task<List<UserColor>> GetUserColorsByUserId(int userId);
         Task<UserColor> GetUserColorByHexValueAndUserId(string hexValue, int userId);
-        Task AddUserColor(UserColor userColor);
+        Task AddUserColor(UserColorDTO userColorDto);
     }
 }

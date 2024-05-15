@@ -1,5 +1,14 @@
+@font-face{
+    font-family:"Khand";
+    src:url("../fonts/Khand-Regular.ttf");
+}
+@font-face{
+    font-family:"VT323";
+    src:url("../fonts/VT323-Regular.ttf");
+}
+
 html, body {
-    font-family: 'Khand', sans-serif;
+    font-family: 'VT323', sans-serif;
 }
 
 a, .btn-link {

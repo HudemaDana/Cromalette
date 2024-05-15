@@ -5,8 +5,19 @@
 @using BApp.Domain.DTOs
 @using BApp.Domain.Models
 @using BApp.Services
+@using BApp.Services.Interfaces
+@using BApp.Components.Utils
+
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
 
 @layout LogInLayout
+
+<CustomPopup @ref="successPopup" Title="Success" Visible="@showSuccessPopup" OnClose="HideSuccessPopup">
+    <p>Sign up operation was successful.</p>
+    <button @onclick="RedirectToLoginPage">Login</button>
+</CustomPopup>
+
 
 <div class="signup-fields-container">
     <EditForm class="signup-form" Model="SignUpModel" FormName="SignUpForm" OnValidSubmit="HandleSubmit">
@@ -29,7 +40,7 @@
         </div>
 
         <div class="signup-submit-container">
-            <ButtonComponent CssClass="login signup" Label="Sign Up" ButtonType="submit" />
+            <ButtonComponent CssClass="login signup" Label="Sign Up" ButtonType="submit" OnClick="RedirectToLoginPage"/>
             <div class="already-signup">
                 You already have an account?
                 <button class="login-button" onclick="@RedirectToLoginPage"> Log In</button>
@@ -42,18 +53,30 @@
 @code {
     [SupplyParameterFromForm]
     private SignUpDTO SignUpModel { get; set; } = new SignUpDTO();
+    private CustomPopup successPopup { get; set; } = new CustomPopup();
 
-    protected override void OnInitialized()
-    {
-    }
+    private bool showSuccessPopup = false;
 
     private async Task HandleSubmit()
     {
-        await UserService.CreateUser(SignUpModel);
+        try
+        {
+            await UserService.CreateUser(SignUpModel);
+            showSuccessPopup = true;
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     private void RedirectToLoginPage()
     {
+        NavigationManager.NavigateTo("/login");
+    }
 
+    private void HideSuccessPopup()
+    {
+        showSuccessPopup = false;
     }
 }

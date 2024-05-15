@@ -1,0 +1,30 @@
+﻿<div class="popup-container" style="@(Visible ? "" : "display: none;")">
+    <div class="popup-content">
+        @if (!string.IsNullOrEmpty(Title))
+        {
+            <div class="popup-header">@Title</div>
+        }
+
+        <div class="popup-body">
+            @ChildContent
+        </div>
+        
+        <div class="popup-footer">
+            <button @onclick="OnClose">Close</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+}

@@ -23,3 +23,12 @@
         width: 10rem;
         padding-bottom: 0px !important;
     }
+
+    .custom-button.landing {
+        background-color: #FF3D70;
+        color:white;
+        height: 3.5rem;
+        width: 10rem;
+        padding-bottom: 0px !important;
+        margin-left:4rem;
+    }

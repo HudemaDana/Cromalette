@@ -1,25 +1,30 @@
 ﻿@page "/weather"
 
 @using BApp.Components
+@using BApp.Components.PaletteExtractor
 @using SixLabors.ImageSharp;
 @using SixLabors.ImageSharp.Processing;
 
+@inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
 <div class="scan-container">
     <div class="card">
         <div class="upload-image-grid-section">
 
-            <div class="image-container">
-                @if (!string.IsNullOrEmpty(_imageDataUrl))
-                {
+
+            @if (!string.IsNullOrEmpty(_imageDataUrl))
+            {
+                <div class="image-container ">
                     <img src="@_imageDataUrl" alt="Image Preview" id="preview" />
-                }
-                else
-                {
+                </div>
+            }
+            else
+            {
+                <div class="image-container no-image">
                     <div>No Image Selected</div>
-                }
-            </div>
+                </div>
+            }
 
             <div class="custom-input-file">
                 <InputFile OnChange="PreviewImage" accept=".png, .jpg, .jpeg" />
@@ -28,18 +33,64 @@
 
         <div class="toggle-grid-section">
             <div class="palette-container">
-                <div class="pallete-color-selector">
-                    @* here it's gonna be a section for palette selector, which will communicate with the image and will activate the buttons if needed *@
-                </div>
-                <div class="action-button-section">
-                    <ButtonComponent CssClass="more-details-button" Label="More"/>
-                    <ButtonComponent CssClass="save-color-button" Label="Save"/>
-                </div>
+                @if (ExtractedColors.Any())
+                {
+                    <div class="pallete-color-selector">
+                        <div class="row">
+                            @foreach (var extractedColor in ExtractedColors)
+                            {
+                                <div class="col-md-6 mb-2">
+                                    <div class="extracted-color-container" style="background: @extractedColor" @onclick="() => ShowColorExtension(extractedColor)" />
+                                </div>
+                            }
+                        </div>
+                    </div>
 
+                    @if (ExtractedColors.Any() && selectedColor is not null)
+                    {
+                        <div class="action-button-section">
+                            <ButtonComponent CssClass="save-color-button" Label="Save" OnClick="SaveColor" />
+                        </div>
+                    }
+                }
             </div>
         </div>
 
-        <div class="palette-grid-section"></div>
+        @if (selectedColor != null)
+        {
+            <ColorExtension Color="selectedColor" />
+        }
 
     </div>
 </div>
+
+@code {
+    private List<String> ExtractedColors { get; set; } = new List<string>
+    {
+        "#F70746",
+        "#33FF57",
+        "#5733FF",
+        "#FF5733",
+        "#33FF57",
+        "#5733FF",
+        "#F70746",
+        "#33FF57",
+        "#F70746",
+        "#33FF57",
+
+    };
+
+    private string selectedColor { get; set; } = null;
+
+    private void ShowColorExtension(string color)
+    {
+        selectedColor = color;
+    }
+
+    private void SaveColor()
+    {
+        //cand dau save trebe sa se trimita un post si sa duca culoare pe backend
+        NavigationManager.NavigateTo("/counter");
+    }
+
+}

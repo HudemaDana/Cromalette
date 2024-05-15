@@ -5,6 +5,7 @@
 @using BApp.Components.InputFields
 @using Microsoft.Extensions.Logging
 
+@inject NavigationManager NavigationManager
 
 @layout LogInLayout
 
@@ -18,10 +19,10 @@
         <InputTextComponent Label="Password" InputType="password" Value=@User.Password />
 
         <div class="login-submit-container">
-            <ButtonComponent CssClass="login" Label="Login" ButtonType="submit" />
+            <ButtonComponent CssClass="login" Label="Login" ButtonType="submit" OnClick="RedirectToHomePage"/>
             <div class="no-account">
                 You don't have an account?
-                <button class="signup-button" onclick="@RedirectToLoginPage"> Sign Up</button>
+                <button class="signup-button" onclick=@RedirectToSignUpPage> Sign Up</button>
             </div>
         </div>
     </EditForm>
@@ -38,8 +39,13 @@
             new UserDTO();
     }
 
-    private void RedirectToLoginPage()
+    private void RedirectToSignUpPage()
     {
+        NavigationManager.NavigateTo("/signup");
+    }
 
+    private void RedirectToHomePage()
+    {
+        NavigationManager.NavigateTo("/home");
     }
 }

@@ -5,15 +5,12 @@ namespace BApp.DataAccess.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserColor> UserColors { get; set; }
         public DbSet<Level> Levels { get; set; }
         public DbSet<UserLevel> UserLevels { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,7 +22,7 @@ namespace BApp.DataAccess.Data
             List<Level> levels = new List<Level>();
 
             // Define a rule for LevelTotalXP based on level index
-            for (int i = 1; i <= 15; i++)
+            for (int i = 1; i <= 100; i++)
             {
                 Level level = new Level
                 {

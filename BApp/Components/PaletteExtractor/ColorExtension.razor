@@ -1,0 +1,54 @@
+﻿@using System.Drawing
+@using System.Linq
+
+@if (!string.IsNullOrEmpty(Color))
+{
+    <div class="color-extension">
+        <h2>@Color</h2>
+        <p>RGB: @Color</p>
+        <div>
+            <h3>Shades</h3>
+            @foreach (var shade in GenerateShades(Color))
+            {
+                <div>@shade</div>
+            }
+        </div>
+        <div>
+            <h3>Tints</h3>
+            @foreach (var tint in GenerateTints(Color))
+            {
+                <div>@tint</div>
+            }
+        </div>
+        <div>
+            <h3>Palette Rules</h3>
+            @foreach (var rule in GeneratePaletteRules(Color))
+            {
+                <div>@rule</div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Color { get; set; }
+
+    private List<string> GenerateShades(string color)
+    {
+        // Example implementation to generate shades
+        return Enumerable.Range(1, 5).Select(i => $"Shade {i}").ToList();
+    }
+
+    private List<string> GenerateTints(string color)
+    {
+        // Example implementation to generate tints
+        return Enumerable.Range(1, 5).Select(i => $"Tint {i}").ToList();
+    }
+
+    private List<string> GeneratePaletteRules(string color)
+    {
+        // Example implementation to generate palette rules
+        return new List<string> { "Monochrome", "Duo", "Tri", "Quadra" };
+    }
+}

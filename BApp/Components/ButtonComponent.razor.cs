@@ -13,15 +13,23 @@ namespace BApp.Components
         [Parameter]
         public string ButtonType { get; set; } = "button";
 
+        [Parameter]
+        public EventCallback OnClick { get; set; }
+
         private bool IsClicked { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
         }
-        private void HandleClick()
+
+        private async Task HandleClick()
         {
             IsClicked = !IsClicked;
+            if (OnClick.HasDelegate)
+            {
+                await OnClick.InvokeAsync();
+            }
         }
     }
 }

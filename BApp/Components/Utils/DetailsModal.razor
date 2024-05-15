@@ -1,0 +1,50 @@
+﻿<!-- ItemDetailsModal.razor -->
+@using System.Collections.Generic
+
+@if (SelectedItem != null)
+{
+    <div class="modal">
+        <div class="modal-content">
+            <span class="close" @onclick="CloseModal">&times;</span>
+            <h2>@SelectedItem.Title</h2>
+            <p>Discovery Date: @SelectedItem.Date.ToShortDateString()</p>
+            <p>Difficulty: @SelectedItem.Difficulty</p>
+            <p>Points: @SelectedItem.Points</p>
+            <div>
+                <h3>Tints</h3>
+                @foreach (var tint in SelectedItem.Tints)
+                {
+                    <div>@tint</div>
+                }
+            </div>
+            <div>
+                <h3>Shades</h3>
+                @foreach (var shade in SelectedItem.Shades)
+                {
+                    <div>@shade</div>
+                }
+            </div>
+            <div>
+                <h3>Palettes</h3>
+                @foreach (var palette in SelectedItem.Palettes)
+                {
+                    <div>@palette</div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public ItemDetails SelectedItem { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    private void CloseModal()
+    {
+        SelectedItem = null;
+        OnClose.InvokeAsync();
+    }
+}

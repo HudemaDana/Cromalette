@@ -5,7 +5,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BApp.Services
 {
-    public partial class UserService : IUserService
+    public class UserService : IUserService
     {
         private readonly HttpClient _httpClient;
 

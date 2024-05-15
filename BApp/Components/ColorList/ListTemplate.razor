@@ -2,20 +2,23 @@
 
 
 <div class="container">
-    <div class="user-info-container">
+@*     <div class="user-info-container">
         <div>Total discovered: 25 </div>
         <div>Total xp: 150.000</div>
-    </div>
+    </div> *@
     <div class="list-container">
         <div class="row">
             @foreach (var listItem in ListItems)
             {
                 <div class="col-md-3 mb-5 py-3">
-                    <ListItem Title="@listItem.Title" HexColor="@listItem.HexColor" Date="@listItem.Date" Xp="@listItem.Xp" />
+                    <ListItem Title="@listItem.Title" HexColor="@listItem.HexColor" Date="@listItem.Date" Xp="@listItem.Xp" OnClick="ShowItemDetails(listItem)" />
                 </div>
             }
         </div>
     </div>
+
+    <DetailsModal SelectedItem="SelectedItem" OnClose="CloseModal" />
+
 </div>
 
 
@@ -30,6 +33,8 @@
     }
 
     private List<ListItemModel> ListItems { get; set; }
+
+    private ListItemModel SelectedItem;
 
     // In your ListPage component, create a list of mock ListItems
     private List<ListItemModel> GetMockListItems()
@@ -61,5 +66,15 @@
     {
         // Fetch the list of mock ListItems
         ListItems = GetMockListItems();
+    }
+
+    private void ShowItemDetails(ListItemModel item)
+    {
+        SelectedItem = item;
+    }
+
+    private void CloseModal()
+    {
+        SelectedItem = null;
     }
 }

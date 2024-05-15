@@ -1,0 +1,17 @@
+﻿<!-- DescriptionCard.razor -->
+<div class="description-card-container">
+    <div class="description-card" style="float: @Alignment">
+        <h1 class="title"> @TitleLabel </h1>
+        <p class="description"> @DescriptionLabel </p>
+    </div>
+</div>
+@code {
+    [Parameter, EditorRequired]
+    public string TitleLabel { get; set; }
+
+    [Parameter, EditorRequired]
+    public string DescriptionLabel { get; set; }
+
+    [Parameter, EditorRequired]
+    public string Alignment { get; set; }
+}

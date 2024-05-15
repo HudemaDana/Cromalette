@@ -1,4 +1,5 @@
 ﻿using BApp.DataAccess.Data;
+using BApp.Domain.DTOs;
 using BApp.Domain.Models;
 using BApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +31,15 @@ namespace BApp.Services
             return await _dbContext.UserColors.FirstOrDefaultAsync(uc => uc.ColorHexValue == hexValue && uc.UserId == userId);
         }
 
-        public async Task AddUserColor(UserColor userColor)
+        public async Task AddUserColor(UserColorDTO userColorDto)
         {
+            var colorWithHex = await _dbContext.UserColors.FirstOrDefaultAsync(uc => uc.ColorHexValue == userColorDto.ColorHexValue);
+
+            var userColor = new UserColor()
+            {
+                UserId = userColorDto.UserId
+
+            };
             await _dbContext.UserColors.AddAsync(userColor);
             await _dbContext.SaveChangesAsync();
         }

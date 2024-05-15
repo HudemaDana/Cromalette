@@ -5,7 +5,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace BApp.Pages
 {
-    public partial class ColorDetector: ComponentBase
+    public partial class ColorDetector : ComponentBase
     {
         private string? _imageDataUrl { get; set; }
 

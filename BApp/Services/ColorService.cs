@@ -3,7 +3,7 @@ using BApp.Services.Interfaces;
 
 namespace BApp.Services
 {
-    public partial class ColorService : IColorService
+    public class ColorService : IColorService
     {
         private readonly HttpClient _httpClient;
 

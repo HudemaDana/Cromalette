@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 
 namespace BApp.Services
 {
-    public partial class UserColorService: IUserColorService
+    public class UserColorService: IUserColorService
     {
         private readonly HttpClient _httpClient;
 
