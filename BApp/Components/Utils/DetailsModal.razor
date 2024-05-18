@@ -1,5 +1,5 @@
-﻿<!-- ItemDetailsModal.razor -->
-@using System.Collections.Generic
+﻿@using System.Collections.Generic
+@using static BApp.Components.ColorList.ListTemplate
 
 @if (SelectedItem != null)
 {
@@ -9,7 +9,7 @@
             <h2>@SelectedItem.Title</h2>
             <p>Discovery Date: @SelectedItem.Date.ToShortDateString()</p>
             <p>Difficulty: @SelectedItem.Difficulty</p>
-            <p>Points: @SelectedItem.Points</p>
+            <p>Points: @SelectedItem.Xp</p>
             <div>
                 <h3>Tints</h3>
                 @foreach (var tint in SelectedItem.Tints)
@@ -36,8 +36,10 @@
 }
 
 @code {
+
+
     [Parameter]
-    public ItemDetails SelectedItem { get; set; }
+    public ListItemModel SelectedItem { get; set; }
 
     [Parameter]
     public EventCallback OnClose { get; set; }

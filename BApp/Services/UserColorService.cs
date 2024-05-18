@@ -15,22 +15,22 @@ namespace BApp.Services
 
         public async Task<List<UserColor>> GetAllUserColors()
         {
-            return await _httpClient.GetFromJsonAsync<List<UserColor>>("api/UserColors");
+            return await _httpClient.GetFromJsonAsync<List<UserColor>>("UserColors");
         }
 
         public async Task<List<UserColor>> GetUserColorsByUserId(int userId)
         {
-            return await _httpClient.GetFromJsonAsync<List<UserColor>>($"api/UserColors/user/{userId}");
+            return await _httpClient.GetFromJsonAsync<List<UserColor>>($"UserColors/user/{userId}");
         }
 
         public async Task<UserColor> GetUserColorByHexValueAndUserId(string hexValue, int userId)
         {
-            return await _httpClient.GetFromJsonAsync<UserColor>($"api/UserColors/{hexValue}/{userId}");
+            return await _httpClient.GetFromJsonAsync<UserColor>($"UserColors/{hexValue}/{userId}");
         }
 
         public async Task AddUserColor(UserColor userColor)
         {
-            await _httpClient.PostAsJsonAsync("api/UserColors", userColor);
+            await _httpClient.PostAsJsonAsync("UserColors", userColor);
         }
     }
 }

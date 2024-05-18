@@ -4,6 +4,30 @@
 @inject NavigationManager NavigationManager
 
 
-@code {
+<div class="home-page-container">
+    <div class="redirection-to-scanner">
+        <h1> SCAN AND GO</h1>
+        <img src="down_arrow.png" alt="Down Arrow" class="down-arrow" @onclick="RedirectToScanSection" />
+    </div>
+    <div class="user-stats-container">
+        <div class="first-grid-section card">
+            <h3> This section is gonna have user basic info - current level, last color found, the most difficult found until now, if the user has a strike of days or no</h3>
+        </div>
+        <div class="second-grid-section card">
+            <h5> this section will be an extension for the first one - maybe first section with level and strikes and second filters about colors</h5>
+        </div>
+        <div class="third-grid-section card">
+            <h5> here a cute redirection to the user color collections  </h5>
+        </div>
+        <div class="forth-grid-section card">
+            <h5> This section will contain a month graph of activity</h5>
+        </div>
+    </div>
+</div>
 
+@code {
+    private void RedirectToScanSection()
+    {
+        NavigationManager.NavigateTo("/weather");
+    }
 }

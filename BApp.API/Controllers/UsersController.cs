@@ -31,10 +31,20 @@ namespace BApp.API.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateUserAsync([FromBody] User user)
+        public async Task<IActionResult> CreateUserAsync([FromBody] SignUpDTO userDto)
         {
             try
             {
+                var user = new User
+                {
+                    Username = userDto.Username,
+                    Email = userDto.Email,
+                    FirstName = userDto.FirstName,
+                    LastName = userDto.LastName,
+                    Password = userDto.Password,
+                    UserLevel = null,
+
+                };
                 //TODO: mapper from userDto to user
                 await _userService.CreateUser(user);
                 return Ok();

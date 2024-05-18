@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BApp.Services", "BApp.Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunction", "AzureFunction\AzureFunction.csproj", "{33FCAECD-7A5F-4E17-BFC4-5C1A0FB277A7}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "BApp.ComputerVision", "ComputerVision\BApp.ComputerVision.pyproj", "{EF3F460D-2729-4F79-9798-1642B67237FB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,8 +45,6 @@ Global
 		{33FCAECD-7A5F-4E17-BFC4-5C1A0FB277A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33FCAECD-7A5F-4E17-BFC4-5C1A0FB277A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33FCAECD-7A5F-4E17-BFC4-5C1A0FB277A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF3F460D-2729-4F79-9798-1642B67237FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF3F460D-2729-4F79-9798-1642B67237FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

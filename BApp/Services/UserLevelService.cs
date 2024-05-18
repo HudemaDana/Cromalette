@@ -15,17 +15,17 @@ namespace BApp.Services
 
         public async Task CreateUserLevelOnUserSignUp(int userId)
         {
-            await _httpClient.PostAsync($"api/UserLevel/signup/{userId}", null);
+            await _httpClient.PostAsync($"UserLevel/signup/{userId}", null);
         }
 
         public async Task DeleteUserLevelOnUserDelete(int userId)
         {
-            await _httpClient.DeleteAsync($"api/UserLevel/delete/{userId}");
+            await _httpClient.DeleteAsync($"UserLevel/delete/{userId}");
         }
 
         public async Task UpdateUserLevelOnColorSave(UserColor userColor)
         {
-            await _httpClient.PostAsJsonAsync("api/UserLevel/colorsave", userColor);
+            await _httpClient.PostAsJsonAsync("UserLevel/colorsave", userColor);
         }
     }
 }

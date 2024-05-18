@@ -1,4 +1,5 @@
-﻿using BApp.Domain.Models;
+﻿using BApp.Domain.DTOs;
+using BApp.Domain.Models;
 using BApp.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,7 +40,7 @@ namespace BApp.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUserColor(UserColor userColor)
+        public async Task<IActionResult> AddUserColor(UserColorDTO userColor)
         {
             await _userColorService.AddUserColor(userColor);
             return Ok();

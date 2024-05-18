@@ -2,13 +2,15 @@
 
 @using BApp.Components
 @using BApp.Components.PaletteExtractor
+@using BApp.Services.Interfaces
 @using SixLabors.ImageSharp;
 @using SixLabors.ImageSharp.Processing;
 
+@inject IImageService ImageService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
-<div class="scan-container">
+<div class="scan-container" style="@(selectedColor != string.Empty ? "height: 200vh;" : "height: 100vh")">
     <div class="card">
         <div class="upload-image-grid-section">
 
@@ -33,11 +35,11 @@
 
         <div class="toggle-grid-section">
             <div class="palette-container">
-                @if (ExtractedColors.Any())
+                @if (colors.Any())
                 {
                     <div class="pallete-color-selector">
                         <div class="row">
-                            @foreach (var extractedColor in ExtractedColors)
+                            @foreach (var extractedColor in colors)
                             {
                                 <div class="col-md-6 mb-2">
                                     <div class="extracted-color-container" style="background: @extractedColor" @onclick="() => ShowColorExtension(extractedColor)" />
@@ -46,7 +48,7 @@
                         </div>
                     </div>
 
-                    @if (ExtractedColors.Any() && selectedColor is not null)
+                    @if (colors.Any() && !string.IsNullOrEmpty(selectedColor))
                     {
                         <div class="action-button-section">
                             <ButtonComponent CssClass="save-color-button" Label="Save" OnClick="SaveColor" />
@@ -56,41 +58,10 @@
             </div>
         </div>
 
-        @if (selectedColor != null)
+        @if (!string.IsNullOrEmpty(selectedColor))
         {
-            <ColorExtension Color="selectedColor" />
+            <ColorExtension ColorHex="@selectedColor" />
         }
 
     </div>
 </div>
-
-@code {
-    private List<String> ExtractedColors { get; set; } = new List<string>
-    {
-        "#F70746",
-        "#33FF57",
-        "#5733FF",
-        "#FF5733",
-        "#33FF57",
-        "#5733FF",
-        "#F70746",
-        "#33FF57",
-        "#F70746",
-        "#33FF57",
-
-    };
-
-    private string selectedColor { get; set; } = null;
-
-    private void ShowColorExtension(string color)
-    {
-        selectedColor = color;
-    }
-
-    private void SaveColor()
-    {
-        //cand dau save trebe sa se trimita un post si sa duca culoare pe backend
-        NavigationManager.NavigateTo("/counter");
-    }
-
-}

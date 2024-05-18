@@ -19,5 +19,12 @@ namespace BApp.Services
             var newSignUpForUser = JsonSerializer.Serialize(signUpModel);
             await _httpClient.PostAsync("Users/create", new StringContent(newSignUpForUser, Encoding.UTF8, "application/json"));
         }
+
+        public async Task<HttpResponseMessage> LoginUser(UserDTO userDto)
+        {
+            var newSignUpForUser = JsonSerializer.Serialize(userDto);
+            var result = await _httpClient.PostAsync("users/login", new StringContent(newSignUpForUser, Encoding.UTF8, "application/json"));
+            return result;
+        }
     }
 }

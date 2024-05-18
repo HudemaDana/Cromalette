@@ -3,19 +3,16 @@ using BApp.Services;
 using BApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
         policy =>
         {
-            policy.WithOrigins("https://localhost:7219")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
         });
 });
 
@@ -29,13 +26,13 @@ builder.Services.AddScoped<IUserColorService, UserColorService>();
 builder.Services.AddScoped<IUserLevelService, UserLevelService>();
 
 builder.Services.AddControllers().AddNewtonsoftJson();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
 app.UseHttpsRedirection();
 
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors("MyAllowSpecificOrigins"); // Use the configured CORS policy
 
 app.UseRouting();
 

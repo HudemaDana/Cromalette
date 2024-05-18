@@ -80,6 +80,18 @@ namespace BApp.Services
         {
             if (user != null && user.Email != null && user.Password != null)
             {
+                var isFirstAuthentification = _dbContext.UserLevels.Any(ul => ul.UserId == user.Id);
+                if (isFirstAuthentification)
+                {
+                    var userLevel = new UserLevel
+                    {
+                        UserId = user.Id,
+                        LevelId = 1,
+                        CurrentXP = 0
+                    };
+                    await _dbContext.UserLevels.AddAsync(userLevel);
+                    await _dbContext.SaveChangesAsync();
+                }
                 var userData = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email && u.Password == user.Password);
 
                 if (userData != null)

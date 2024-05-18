@@ -3,9 +3,16 @@
 @using BApp.Components
 @using BApp.Domain.DTOs
 @using BApp.Components.InputFields
+@using BApp.Services.Interfaces
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.Extensions.Logging
+@using System.IdentityModel.Tokens.Jwt;
 
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider authStateProvider
+@inject ILocalStorageService LocalStorage
+@inject IUserService UserService
 
 @layout LogInLayout
 
@@ -19,7 +26,7 @@
         <InputTextComponent Label="Password" InputType="password" Value=@User.Password />
 
         <div class="login-submit-container">
-            <ButtonComponent CssClass="login" Label="Login" ButtonType="submit" OnClick="RedirectToHomePage"/>
+            <ButtonComponent CssClass="login" Label="Login" ButtonType="submit" OnClick="HandleLogin"/>
             <div class="no-account">
                 You don't have an account?
                 <button class="signup-button" onclick=@RedirectToSignUpPage> Sign Up</button>
@@ -31,12 +38,45 @@
 @code {
 
     [SupplyParameterFromForm]
-    private UserDTO? User { get; set; }
+    private UserDTO? User { get; set; } = new UserDTO();
 
-    protected override void OnInitialized()
+    private string _submitResult { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
     {
-        User ??=
-            new UserDTO();
+        var token = await LocalStorage.GetItemAsync<string>("token");
+
+        if (token != null)
+        {
+            //await authStateProvider.GetAuthenticationStateAsync();
+
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+            var role = jwt.Claims.First(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;
+        }
+    }
+
+    private async Task HandleLogin()
+    {
+        _submitResult = string.Empty;
+        await LocalStorage.ClearAsync();
+
+        var result = await UserService.LoginUser(User);
+        var token = await result.Content.ReadAsStringAsync();
+
+
+        if (token != String.Empty && token != "Invalid credentials!")
+        {
+            await LocalStorage.SetItemAsync("token", token);
+           // await authStateProvider.GetAuthenticationStateAsync();
+
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+
+        }
+        else
+        {
+            _submitResult = "*email or password incorrect";
+        }
+
     }
 
     private void RedirectToSignUpPage()
@@ -48,4 +88,6 @@
     {
         NavigationManager.NavigateTo("/home");
     }
+
+
 }

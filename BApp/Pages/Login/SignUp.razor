@@ -20,7 +20,7 @@
 
 
 <div class="signup-fields-container">
-    <EditForm class="signup-form" Model="SignUpModel" FormName="SignUpForm" OnValidSubmit="HandleSubmit">
+    <EditForm class="signup-form" Model="SignUpModel" FormName="SignUpForm" OnValidSubmit="HandleSignUp">
 
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -40,7 +40,7 @@
         </div>
 
         <div class="signup-submit-container">
-            <ButtonComponent CssClass="login signup" Label="Sign Up" ButtonType="submit" OnClick="RedirectToLoginPage"/>
+            <ButtonComponent CssClass="login signup" Label="Sign Up" ButtonType="submit" OnClick="HandleSignUp"/>
             <div class="already-signup">
                 You already have an account?
                 <button class="login-button" onclick="@RedirectToLoginPage"> Log In</button>
@@ -57,7 +57,7 @@
 
     private bool showSuccessPopup = false;
 
-    private async Task HandleSubmit()
+    private async Task HandleSignUp()
     {
         try
         {

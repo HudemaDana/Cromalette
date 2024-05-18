@@ -1,28 +1,32 @@
 ﻿@using System.Drawing
 @using System.Linq
+@using BApp.Services.Interfaces
+@using ColorName
 
-@if (!string.IsNullOrEmpty(Color))
+@inject IColorService ColorService
+
+@if (!string.IsNullOrEmpty(ColorHex))
 {
     <div class="color-extension">
-        <h2>@Color</h2>
-        <p>RGB: @Color</p>
+        <h2>@ColorNameProvider.GetColorNameFromHex(ColorHex).colorName</h2>
+        <p>@_rgb</p>
         <div>
             <h3>Shades</h3>
-            @foreach (var shade in GenerateShades(Color))
+            @foreach (var shade in _shades)
             {
                 <div>@shade</div>
             }
         </div>
         <div>
             <h3>Tints</h3>
-            @foreach (var tint in GenerateTints(Color))
+            @foreach (var tint in _tints)
             {
                 <div>@tint</div>
             }
         </div>
         <div>
             <h3>Palette Rules</h3>
-            @foreach (var rule in GeneratePaletteRules(Color))
+            @foreach (var rule in GeneratePaletteRules(ColorHex))
             {
                 <div>@rule</div>
             }
@@ -32,7 +36,30 @@
 
 @code {
     [Parameter]
-    public string Color { get; set; }
+    public string ColorHex { get; set; }
+
+
+
+    private Color _color { get; set; }
+
+    private string _rgb { get; set; }
+
+
+
+    private List<string> _shades { get; set; }
+
+    private List<string> _tints { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _color = ColorTranslator.FromHtml(ColorHex);
+        _rgb = $"RGB: ({_color.R}, {_color.G}, {_color.B})";
+
+        _shades = await ColorService.GenerateShades(ColorHex, 5);
+        _tints = await ColorService.GenerateTints(ColorHex, 5);
+    }
+
 
     private List<string> GenerateShades(string color)
     {
