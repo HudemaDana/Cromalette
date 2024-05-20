@@ -15,5 +15,11 @@ namespace BApp.Components.InputFields
 
         [Parameter]
         public EventCallback<string> ValueChanged { get; set; }
+
+        private async Task OnValueChanged(ChangeEventArgs e)
+        {
+            Value = (string)e.Value;
+            await ValueChanged.InvokeAsync(Value);
+        }
     }
 }

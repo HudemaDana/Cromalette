@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BApp.Domain.DTOs
+﻿namespace BApp.Domain.DTOs
 {
     public class UserDTO
     {
@@ -16,8 +14,5 @@ namespace BApp.Domain.DTOs
 
         public string Password { get; set; }
 
-        public LevelDTO Level { get; set; }
-
-        public List<UserColorDTO> UserColors { get; set; }
     }
 }

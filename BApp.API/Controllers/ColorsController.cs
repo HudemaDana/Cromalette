@@ -15,16 +15,16 @@ namespace BApp.API.Controllers
         }
 
         [HttpGet("tints")]
-        public ActionResult<List<string>> GenerateTints([FromQuery] string hexColor, [FromQuery] int count)
+        public async Task<ActionResult<List<string>>> GenerateTints([FromQuery] string hexColor, [FromQuery] int count)
         {
-            var tints = _colorService.GenerateTints(hexColor, count);
+            var tints = await _colorService.GenerateTints(hexColor, count);
             return Ok(tints);
         }
 
         [HttpGet("shades")]
-        public ActionResult<List<string>> GenerateShades([FromQuery] string hexColor, [FromQuery] int count)
+        public async Task<ActionResult<List<string>>> GenerateShadesAsync([FromQuery] string hexColor, [FromQuery] int count)
         {
-            var shades = _colorService.GenerateShades(hexColor, count);
+            var shades = await _colorService.GenerateShades(hexColor, count);
             return Ok(shades);
         }
     }

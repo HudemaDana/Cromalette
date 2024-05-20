@@ -1,0 +1,21 @@
+﻿.color-extension {
+    padding: 20px;
+}
+
+.color-bar {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.color-block {
+    flex: 1;
+    height: 50px;
+    margin: 2px;
+    cursor: pointer;
+}
+
+select {
+    margin-left: 10px;
+    padding: 5px;
+}

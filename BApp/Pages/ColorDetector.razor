@@ -3,12 +3,17 @@
 @using BApp.Components
 @using BApp.Components.PaletteExtractor
 @using BApp.Services.Interfaces
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
 @using SixLabors.ImageSharp;
 @using SixLabors.ImageSharp.Processing;
 
 @inject IImageService ImageService
+@inject IUserColorService UserColorService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
+@inject AuthenticationStateProvider authStateProvider
+@inject ILocalStorageService LocalStorage
 
 <div class="scan-container" style="@(selectedColor != string.Empty ? "height: 200vh;" : "height: 100vh")">
     <div class="card">
@@ -51,7 +56,7 @@
                     @if (colors.Any() && !string.IsNullOrEmpty(selectedColor))
                     {
                         <div class="action-button-section">
-                            <ButtonComponent CssClass="save-color-button" Label="Save" OnClick="SaveColor" />
+                            <ButtonComponent CssClass="save-color-button" Label="Save" OnClick="SaveColorAsync" />
                         </div>
                     }
                 }

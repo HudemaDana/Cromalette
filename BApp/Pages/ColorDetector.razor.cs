@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BApp.Domain.DTOs;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace BApp.Pages
 {
@@ -13,16 +15,52 @@ namespace BApp.Pages
 
         private List<string> colors { get; set; } = new List<string>();
 
+        private int _userId { get; set; }
 
+        protected override async Task OnInitializedAsync()
+        {
+            var token = await LocalStorage.GetItemAsync<string>("token");
+
+            if (token != null)
+            {
+                await authStateProvider.GetAuthenticationStateAsync();
+
+                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+                _userId = int.Parse(jwt.Claims.First(c => c.Type == "Id").Value);
+            }
+        }
         private void ShowColorExtension(string color)
         {
             selectedColor = color;
         }
 
-        private void SaveColor()
+        private async Task SaveColorAsync()
         {
-            //cand dau save trebe sa se trimita un post si sa duca culoare pe backend
-            NavigationManager.NavigateTo("/counter");
+            if (_userId > 0)
+            {
+                try
+                {
+                    var userColor = new UserColorDTO
+                    {
+                        UserId = _userId,
+                        ColorHexValue = selectedColor
+                    };
+
+                    await UserColorService.AddUserColor(userColor);
+
+                    NavigationManager.NavigateTo("/counter");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString(), "Error while saving a new color");
+                }
+            }
+            else
+            {
+                // Handle the case where the user ID is not found
+            }
+
+
         }
         private async Task PreviewImage(InputFileChangeEventArgs e)
         {

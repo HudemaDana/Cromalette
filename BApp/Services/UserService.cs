@@ -1,6 +1,7 @@
 ﻿using BApp.Domain.DTOs;
 using BApp.Services.Interfaces;
 using System.Text;
+using WBizTrip.Client.Authentication;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BApp.Services
@@ -20,7 +21,7 @@ namespace BApp.Services
             await _httpClient.PostAsync("Users/create", new StringContent(newSignUpForUser, Encoding.UTF8, "application/json"));
         }
 
-        public async Task<HttpResponseMessage> LoginUser(UserDTO userDto)
+        public async Task<HttpResponseMessage> LoginUser(LoginRequest userDto)
         {
             var newSignUpForUser = JsonSerializer.Serialize(userDto);
             var result = await _httpClient.PostAsync("users/login", new StringContent(newSignUpForUser, Encoding.UTF8, "application/json"));

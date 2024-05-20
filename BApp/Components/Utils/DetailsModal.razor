@@ -1,9 +1,10 @@
 ﻿@using System.Collections.Generic
+@using BApp.Domain.Models
 @using static BApp.Components.ColorList.ListTemplate
 
 @if (SelectedItem != null)
 {
-    <div class="modal">
+  @*   <div class="modal">
         <div class="modal-content">
             <span class="close" @onclick="CloseModal">&times;</span>
             <h2>@SelectedItem.Title</h2>
@@ -32,14 +33,14 @@
                 }
             </div>
         </div>
-    </div>
+    </div> *@
 }
 
 @code {
 
 
     [Parameter]
-    public ListItemModel SelectedItem { get; set; }
+    public UserColor SelectedItem { get; set; }
 
     [Parameter]
     public EventCallback OnClose { get; set; }

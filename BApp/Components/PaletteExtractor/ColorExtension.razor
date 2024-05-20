@@ -1,81 +1,123 @@
-﻿@using System.Drawing
+﻿@page "/color-details"
+@using System.Drawing
 @using System.Linq
 @using BApp.Services.Interfaces
 @using ColorName
 
 @inject IColorService ColorService
 
-@if (!string.IsNullOrEmpty(ColorHex))
-{
-    <div class="color-extension">
+<div class="color-extension">
+    @if (!string.IsNullOrEmpty(ColorHex))
+    {
         <h2>@ColorNameProvider.GetColorNameFromHex(ColorHex).colorName</h2>
         <p>@_rgb</p>
+
+        <div>
+            <label for="shadeCount">Number of Shades/Tints:</label>
+            <select id="shadeCount" @onchange="OnShadeCountChanged">
+                @for (int i = 5; i <= 10; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+
+        <div>
+            <label for="valueType">Value Type:</label>
+            <select id="valueType" @bind="selectedValueType">
+                <option value="hex">Hex</option>
+                <option value="rgb">RGB</option>
+                <option value="hsv">HSV</option>
+            </select>
+        </div>
+
         <div>
             <h3>Shades</h3>
-            @foreach (var shade in _shades)
-            {
-                <div>@shade</div>
-            }
+            <div class="color-bar">
+                @for (int i = 0; i < 10; i++)
+                {
+                    var color = i < _shades.Count ? _shades[i] : "#e0e0e0";
+                    <div class="color-block" style="background-color: @color" @onclick="() => OnColorClicked(color)" />
+                }
+            </div>
         </div>
+
         <div>
             <h3>Tints</h3>
-            @foreach (var tint in _tints)
-            {
-                <div>@tint</div>
-            }
+            <div class="color-bar">
+                @for (int i = 0; i < 10; i++)
+                {
+                    var color = i < _tints.Count ? _tints[i] : "#e0e0e0";
+                    <div class="color-block" style="background-color: @color" @onclick="() => OnColorClicked(color)" />
+                }
+            </div>
         </div>
+
         <div>
-            <h3>Palette Rules</h3>
-            @foreach (var rule in GeneratePaletteRules(ColorHex))
-            {
-                <div>@rule</div>
-            }
+            <h3>Selected Color Value</h3>
+            <p>@selectedColorValue</p>
         </div>
-    </div>
-}
+    }
+</div>
 
 @code {
     [Parameter]
     public string ColorHex { get; set; }
 
-
+    private int _shadeCount { get; set; } = 5;
+    private string _rgb { get; set; }
+    private string selectedValueType { get; set; } = "hex";
+    private string selectedColorValue { get; set; }
 
     private Color _color { get; set; }
 
-    private string _rgb { get; set; }
-
-
-
-    private List<string> _shades { get; set; }
-
-    private List<string> _tints { get; set; }
+    private List<string> _shades { get; set; } = new List<string>();
+    private List<string> _tints { get; set; } = new List<string>();
 
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadColors();
+    }
+
+    private async Task OnShadeCountChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value.ToString(), out int newCount))
+        {
+            _shadeCount = newCount;
+            await LoadColors();
+        }
+    }
+
+    private async Task LoadColors()
+    {
         _color = ColorTranslator.FromHtml(ColorHex);
         _rgb = $"RGB: ({_color.R}, {_color.G}, {_color.B})";
 
-        _shades = await ColorService.GenerateShades(ColorHex, 5);
-        _tints = await ColorService.GenerateTints(ColorHex, 5);
+        _shades = await ColorService.GenerateShades(ColorHex, _shadeCount);
+        _tints = await ColorService.GenerateTints(ColorHex, _shadeCount);
     }
 
-
-    private List<string> GenerateShades(string color)
+    private void OnColorClicked(string colorHex)
     {
-        // Example implementation to generate shades
-        return Enumerable.Range(1, 5).Select(i => $"Shade {i}").ToList();
+        if (!string.IsNullOrEmpty(colorHex) && colorHex != "#e0e0e0")
+        {
+            var color = ColorTranslator.FromHtml(colorHex);
+            selectedColorValue = selectedValueType switch
+            {
+                "rgb" => $"RGB: ({color.R}, {color.G}, {color.B})",
+                "hsv" => $"HSV: ({color.GetHue()}, {color.GetSaturation() * 100}%, {color.GetBrightness() * 100}%)",
+                _ => colorHex,
+            };
+        }
+        else
+        {
+            selectedColorValue = "No valid color selected.";
+        }
     }
 
-    private List<string> GenerateTints(string color)
+    private void OnValueTypeChanged()
     {
-        // Example implementation to generate tints
-        return Enumerable.Range(1, 5).Select(i => $"Tint {i}").ToList();
-    }
-
-    private List<string> GeneratePaletteRules(string color)
-    {
-        // Example implementation to generate palette rules
-        return new List<string> { "Monochrome", "Duo", "Tri", "Quadra" };
+       
     }
 }

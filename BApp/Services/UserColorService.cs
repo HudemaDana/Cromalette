@@ -1,4 +1,5 @@
-﻿using BApp.Domain.Models;
+﻿using BApp.Domain.DTOs;
+using BApp.Domain.Models;
 using BApp.Services.Interfaces;
 using System.Net.Http.Json;
 
@@ -28,7 +29,7 @@ namespace BApp.Services
             return await _httpClient.GetFromJsonAsync<UserColor>($"UserColors/{hexValue}/{userId}");
         }
 
-        public async Task AddUserColor(UserColor userColor)
+        public async Task AddUserColor(UserColorDTO userColor)
         {
             await _httpClient.PostAsJsonAsync("UserColors", userColor);
         }

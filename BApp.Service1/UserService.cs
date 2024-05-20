@@ -78,19 +78,29 @@ namespace BApp.Services
 
         public async Task<string> AuthentificateUser(User user)
         {
-            if (user != null && user.Email != null && user.Password != null)
+            var userWithId = _dbContext.Users.FirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
+            if (userWithId != null && user.Email != null && user.Password != null)
             {
-                var isFirstAuthentification = _dbContext.UserLevels.Any(ul => ul.UserId == user.Id);
-                if (isFirstAuthentification)
+                var existUserLevel = _dbContext.UserLevels.Any(ul => ul.UserId == userWithId.Id);
+                if (!existUserLevel)
                 {
-                    var userLevel = new UserLevel
+                    try
                     {
-                        UserId = user.Id,
-                        LevelId = 1,
-                        CurrentXP = 0
-                    };
-                    await _dbContext.UserLevels.AddAsync(userLevel);
-                    await _dbContext.SaveChangesAsync();
+                        var userLevel = new UserLevel
+                        {
+                            UserId = userWithId.Id,
+                            LevelId = 1,
+                            CurrentXP = 0
+                        };
+                        _dbContext.UserLevels.Add(userLevel);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var errorDetails = ex.InnerException?.Message ?? ex.Message;
+                        Console.WriteLine($"Error saving data: {errorDetails}");
+                        throw;
+                    }
                 }
                 var userData = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email && u.Password == user.Password);
 
@@ -118,8 +128,7 @@ namespace BApp.Services
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("Id", user.Id.ToString()),
                         new Claim("Username", user.Username),
-                        new Claim("Email", user.Email),
-                        new Claim("Password", user.Password)
+                        new Claim("Email", user.Email)
                     };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

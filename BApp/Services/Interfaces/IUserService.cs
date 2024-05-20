@@ -1,4 +1,5 @@
 ﻿using BApp.Domain.DTOs;
+using WBizTrip.Client.Authentication;
 
 namespace BApp.Services.Interfaces
 {
@@ -6,6 +7,6 @@ namespace BApp.Services.Interfaces
     {
         Task CreateUser(SignUpDTO signUpModel);
 
-        Task<HttpResponseMessage> LoginUser(UserDTO userDto);
+        Task<HttpResponseMessage> LoginUser(LoginRequest userDto);
     }
 }

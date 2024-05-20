@@ -4,7 +4,8 @@ using BApp.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Blazored.LocalStorage;
-using System.Net.Http;
+using Microsoft.AspNetCore.Components.Authorization;
+using WBizTrip.Client.Authentication;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -29,15 +30,11 @@ builder.Services.AddScoped<IUserService>(sp => new UserService(dotNetClient));
 builder.Services.AddScoped<IUserColorService>(sp => new UserColorService(dotNetClient));
 builder.Services.AddScoped<IUserLevelService>(sp => new UserLevelService(dotNetClient));
 
-
-//// Registering services
-//builder.Services.AddScoped<IColorService, ColorService>();
-//builder.Services.AddScoped<IUserService, UserService>();
-//builder.Services.AddScoped<IUserColorService, UserColorService>();
-//builder.Services.AddScoped<IUserLevelService, UserLevelService>();
-
-//builder.Services.AddScoped<IImageService, ImageService>();
-
 builder.Services.AddBlazoredLocalStorage();
+
+builder.Services.AddScoped<CustomAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
+    provider.GetRequiredService<CustomAuthenticationStateProvider>());
+builder.Services.AddAuthorizationCore();
 
 await builder.Build().RunAsync();

@@ -1,5 +1,6 @@
 ﻿using BApp.DataAccess.Data;
 using BApp.Domain.DTOs;
+using BApp.Domain.Enums;
 using BApp.Domain.Models;
 using BApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -34,14 +35,41 @@ namespace BApp.Services
         public async Task AddUserColor(UserColorDTO userColorDto)
         {
             var colorWithHex = await _dbContext.UserColors.FirstOrDefaultAsync(uc => uc.ColorHexValue == userColorDto.ColorHexValue);
+            var colorDifficultyId = await GetColorDifficultyId(userColorDto);
 
             var userColor = new UserColor()
             {
-                UserId = userColorDto.UserId
-
+                UserId = userColorDto.UserId,
+                ColorHexValue = userColorDto.ColorHexValue,
+                //ColorDifficultyId = colorDifficultyId,
+                Difficulty = DifficultyStatus.Easy,
+                SavingDate = DateTime.Now,
             };
+
             await _dbContext.UserColors.AddAsync(userColor);
             await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task<int> GetColorDifficultyId(UserColorDTO userColorDto)
+        {
+            var colorDifficulty = _dbContext.ColorDifficulties.FirstOrDefault(cd => cd.ColorHexValue == userColorDto.ColorHexValue);
+
+            if (colorDifficulty is null)
+            {
+                var newColorDifficulty = new ColorDifficulty()
+                {
+                    ColorHexValue = userColorDto.ColorHexValue,
+                    Status = DifficultyStatus.Easy,
+                    FindingCount = 1
+                };
+
+                await _dbContext.ColorDifficulties.AddAsync(newColorDifficulty);
+                await _dbContext.SaveChangesAsync();
+
+                colorDifficulty = _dbContext.ColorDifficulties.FirstOrDefault(cd => cd.ColorHexValue == userColorDto.ColorHexValue);
+            }
+
+            return colorDifficulty.Id;
         }
     }
 }

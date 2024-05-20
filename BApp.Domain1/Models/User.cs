@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BApp.Domain.Models
+﻿namespace BApp.Domain.Models
 {
     public class User
     {

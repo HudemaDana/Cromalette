@@ -1,6 +1,7 @@
 ﻿using BApp.Domain.DTOs;
 using BApp.Domain.Models;
 using BApp.Services.Interfaces;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BApp.API.Controllers
@@ -85,11 +86,23 @@ namespace BApp.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> AuthentificateUser(User _userData)
+        public async Task<ActionResult<string>> AuthentificateUser([FromBody] LoginRequest userDto)
         {
             try
             {
-                var token = await _userService.AuthentificateUser(_userData);
+                var user = new User
+                {
+                    Username = "",
+                    Email = userDto.Email,
+                    FirstName = "",
+                    LastName = "",
+                    Password = userDto.Password,
+                    UserLevel = null,
+                    UserColors = null
+
+                };
+
+                var token = await _userService.AuthentificateUser(user);
                 return Ok(token);
             }
             catch (Exception exception)

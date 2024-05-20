@@ -5,7 +5,7 @@ namespace BApp.Services
 {
     public class ColorService : IColorService
     {
-        public List<string> GenerateTints(string hexColor, int count)
+        public async Task<List<string>> GenerateTints(string hexColor, int count)
         {
             Color baseColor = ColorTranslator.FromHtml(hexColor);
             List<string> tints = new List<string>();
@@ -20,7 +20,7 @@ namespace BApp.Services
             return tints;
         }
 
-        public List<string> GenerateShades(string hexColor, int count)
+        public async Task<List<string>> GenerateShades(string hexColor, int count)
         {
             Color baseColor = ColorTranslator.FromHtml(hexColor);
             List<string> shades = new List<string>();

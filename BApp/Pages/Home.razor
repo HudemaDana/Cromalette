@@ -1,4 +1,5 @@
 ﻿@page "/home"
+@using BApp.Components.Home
 
 
 @inject NavigationManager NavigationManager
@@ -12,6 +13,7 @@
     <div class="user-stats-container">
         <div class="first-grid-section card">
             <h3> This section is gonna have user basic info - current level, last color found, the most difficult found until now, if the user has a strike of days or no</h3>
+            <XpProgressBar CurrentXp="150" TotalXp="300" />
         </div>
         <div class="second-grid-section card">
             <h5> this section will be an extension for the first one - maybe first section with level and strikes and second filters about colors</h5>
