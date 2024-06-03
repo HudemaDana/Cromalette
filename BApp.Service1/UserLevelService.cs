@@ -1,4 +1,5 @@
 ﻿using BApp.DataAccess.Data;
+using BApp.Domain.Enums;
 using BApp.Domain.Models;
 using BApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,18 @@ namespace BApp.Services
             }
         }
 
+        public UserLevel GetUserLevel(int userId)
+        {
+            var userLevel = _dbContext.UserLevels.FirstOrDefault(ul => ul.UserId == userId);
+            if (userLevel is not null)
+            {
+                var currentLevel = _dbContext.Levels.FirstOrDefault(l => l.Id == userLevel.LevelId);
+                userLevel.Level = currentLevel;
+            }
+
+            return userLevel;
+        }
+
         public async Task UpdateUserLevelOnColorSave(UserColor userColor)
         {
             // Get the user's current UserLevel
@@ -65,8 +78,9 @@ namespace BApp.Services
                 _dbContext.UserLevels.Add(userLevel);
             }
 
+            var colorDifficulty = await _dbContext.ColorDifficulties.FirstOrDefaultAsync(cd => cd.ColorHexValue == userColor.ColorHexValue);
             // Update current XP based on color difficulty
-            userLevel.CurrentXP += (int)userColor.Difficulty;
+            userLevel.CurrentXP += (int?)colorDifficulty.Status ?? (int)DifficultyStatus.Easy;
 
             // Get the next level
             var nextLevel = await _dbContext.Levels.FirstOrDefaultAsync(l => l.Id == userLevel.LevelId + 1);

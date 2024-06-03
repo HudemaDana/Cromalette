@@ -11,5 +11,7 @@ namespace BApp.Domain.Models
         public DifficultyStatus Status { get; set; }
 
         public int FindingCount {  get; set; }
+
+        public List<UserColor> UserColors { get; set; }
     }
 }

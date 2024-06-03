@@ -17,6 +17,8 @@ namespace BApp.Pages
 
         private int _userId { get; set; }
 
+        private string plotUrl { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             var token = await LocalStorage.GetItemAsync<string>("token");
@@ -48,6 +50,9 @@ namespace BApp.Pages
 
                     await UserColorService.AddUserColor(userColor);
 
+                    var userLevel = await UserLevelService.GetUserLevel(_userId);
+                    UserLevelState.SetUserLevel(userLevel.LevelId, userLevel.CurrentXP);
+
                     NavigationManager.NavigateTo("/counter");
                 }
                 catch (Exception ex)
@@ -72,6 +77,8 @@ namespace BApp.Pages
                 if (file != null)
                 {
                     colors = await ImageService.GetColors(file);
+                    //plotUrl = await ImageService.GetPaletteColors(file);
+
 
                     // Read the image data into a buffer asynchronously
                     using var memoryStream = new MemoryStream();

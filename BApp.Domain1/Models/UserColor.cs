@@ -13,12 +13,14 @@ namespace BApp.Domain.Models
 
         public string ColorHexValue { get; set; }
 
-        //public int ColorDifficultyId { get; set; }
+        public int ColorDifficultyId { get; set; }
 
-        public DifficultyStatus Difficulty { get; set; }
+        //public DifficultyStatus Difficulty { get; set; }
 
         public DateTime SavingDate { get; set; }
 
         public User User { get; set; }
+
+        public ColorDifficulty ColorDifficulty { get; set; }
     }
 }

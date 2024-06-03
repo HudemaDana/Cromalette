@@ -16,6 +16,11 @@ namespace BApp.DataAccess.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Level>().HasData(GenerateLevels());
+
+            modelBuilder.Entity<UserColor>()
+                        .HasOne(uc => uc.ColorDifficulty)
+                        .WithMany(cd => cd.UserColors)
+                        .HasForeignKey(uc => uc.ColorDifficultyId);
         }
 
         private List<Level> GenerateLevels()

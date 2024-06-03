@@ -1,19 +1,64 @@
-﻿.container {
-    background: linear-gradient(to bottom, #92ADF9 0%, #98DCF9 50%, #ffffff 90%);
-    padding: 0 !important;
+﻿
+.container {
+    height: 80vh;
+    padding:0rem;
+}
+/* List Container */
+.list-container {
+    /* padding: 2rem 5rem;*/
+    height: 100%;
 }
 
-    .user-info-container {
-        height: 3rem;
-        background-color: #92ADF9;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        position: sticky;
-        top: 0;
-        display: flex;
-        flex-direction: column;
-        align-content: space-between;
+/* Card Styling */
+.card {
+    background-color: #a0c4ff; /* Matching blue pastel color */
+    padding: 20px;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 1rem;
+    height: inherit;
+}
+
+/* List Item Styling */
+.list-item-container {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    background-color: #c6f5ff; /* Light blue pastel background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem;
+}
+
+    .list-item-container:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     }
 
-    .list-container {
-        padding: 2rem 0 2rem 5rem;
+.upper-section .color {
+    height: 100px;
+    border-bottom: 5px solid white;
+}
+
+.lower-section {
+    padding: 10px;
+    background-color: white;
+    text-align: center;
+}
+
+    .lower-section .color-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
     }
+
+    .lower-section .xp {
+        font-weight: bold;
+        color: #ff9800;
+        font-size: 1.2em;
+    }
+
+.row > * {
+    padding-right: calc(var(--bs-gutter-x)* 1.5)!important;
+    padding-left: calc(var(--bs-gutter-x)* 1.5)!important;
+}

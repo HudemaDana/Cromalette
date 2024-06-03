@@ -27,5 +27,10 @@ namespace BApp.Services
         {
             await _httpClient.PostAsJsonAsync("UserLevel/colorsave", userColor);
         }
+
+        public async Task<UserLevel> GetUserLevel(int userId)
+        {
+            return await _httpClient.GetFromJsonAsync<UserLevel>($"UserLevel/user/{userId}");
+        }
     }
 }

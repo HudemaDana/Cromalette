@@ -35,7 +35,7 @@ def rgb_to_hex(rgb):
 #     return hex_colors
 
 
-def extract_colors(image, num_colors=10):
+def extract_colors(image, num_colors=9):
     # Check if the image is mostly of one color
     if is_mostly_one_color(image):
         # Return the dominant color repeated to match the requested number of colors
@@ -67,6 +67,46 @@ def extract_colors(image, num_colors=10):
     hex_colors = [rgb_to_hex(color) for color in sorted_colors]
 
     return hex_colors[:num_colors]
+
+def extract_colors1(image, num_colors=9):
+    # Check if the image is mostly of one color
+    if is_mostly_one_color(image):
+        # Return the dominant color repeated to match the requested number of colors
+        dominant_color = np.mean(image, axis=(0, 1))
+        return [(rgb_to_hex(dominant_color), 1.0)] * num_colors
+
+    # Resize image for faster processing
+    resized_image = cv2.resize(image, (500, 500), interpolation=cv2.INTER_AREA)
+
+    # Convert image to 2D array of pixels
+    pixels = resized_image.reshape((-1, 3))
+
+    # Apply KMeans clustering
+    kmeans = KMeans(n_clusters=num_colors)
+    kmeans.fit(pixels)
+    
+    # Get the cluster centers (the dominant colors)
+    colors = kmeans.cluster_centers_
+
+    # Count the number of pixels in each cluster
+    labels = kmeans.labels_
+    label_counts = np.bincount(labels)
+
+    # Calculate the proportion of each color
+    total_pixels = len(pixels)
+    color_proportions = label_counts / total_pixels
+
+    # Sort colors by proportion in descending order
+    sorted_indices = np.argsort(color_proportions)[::-1]
+    sorted_colors = colors[sorted_indices]
+    sorted_proportions = color_proportions[sorted_indices]
+
+    # Convert RGB to HEX and pair with proportions
+    hex_colors_with_proportions = [(rgb_to_hex(color), proportion) for color, proportion in zip(sorted_colors, sorted_proportions)]
+
+    return hex_colors_with_proportions[:num_colors]
+
+
 
 def is_mostly_one_color(image, threshold=0.95):
     # Flatten the image array and check if more than 95% of the pixels are within a small range of each other
@@ -104,7 +144,7 @@ def get_colors():
 
     # Load the image
     image = cv2.imread(temp_file_path)
-    colors = extract_colors(image, num_colors=10)
+    colors = extract_colors(image, num_colors=9)
 
     # Clean up the temporary file
     os.remove(temp_file_path)
@@ -125,15 +165,17 @@ def create_plot():
         file.save(temp_file.name)
         temp_file_path = temp_file.name
 
-    colors = extract_colors(temp_file_path)
-    color_sizes = [size for _, size in colors]
+    image = cv2.imread(temp_file_path)
+    colors_with_proportions = extract_colors1(image, num_colors=10)
+    colors = [color for color, _ in colors_with_proportions]
+    proportions = [proportion for _, proportion in colors_with_proportions]
     
-    plot_path = plot_colors([color for color, _ in colors], color_sizes)
+    plot_path = plot_colors(colors, proportions)
 
     # Clean up the temporary file
     os.remove(temp_file_path)
 
-    return jsonify({'plot_url': plot_path})
+    return jsonify(plot_path)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

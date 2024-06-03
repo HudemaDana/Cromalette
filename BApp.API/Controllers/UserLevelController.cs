@@ -15,6 +15,13 @@ namespace BApp.Controllers
             _userLevelService = userLevelService;
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetUserLevel(int userId)
+        {
+            var userLevel = _userLevelService.GetUserLevel(userId);
+            return Ok(userLevel);
+        }
+
         [HttpPost("signup/{userId}")]
         public async Task<IActionResult> CreateUserLevelOnUserSignUp(int userId)
         {

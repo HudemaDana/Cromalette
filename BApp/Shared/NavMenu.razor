@@ -1,30 +1,127 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">CApp</a>
+﻿@using BApp.Domain.Models
+@using BApp.Services.Interfaces
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.IdentityModel.Tokens.Jwt
+
+@inject AuthenticationStateProvider AuthStateProvider
+@inject ILocalStorageService LocalStorage
+@inject IUserLevelService UserLevelService
+@inject UserLevelState UserLevelState
+@inject NavigationManager Navigation
+
+<nav class="navbar-content">
+    <div class="navbar-brand">
+        <div>
+            <svg width="50" height="50" viewBox="0 0 89 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <mask id="mask0_1_21" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="89" height="88">
+                    <path d="M89 0H0V88H89V0Z" fill="white" />
+                </mask>
+                <g mask="url(#mask0_1_21)">
+                    <path d="M66.0323 57.3906C66.0324 59.2608 65.484 61.09 64.4548 62.652C63.4256 64.2139 61.9607 65.4401 60.2415 66.1788C58.5223 66.9174 56.624 67.1363 54.7817 66.8082C52.9393 66.48 51.2336 65.6194 49.8755 64.3326L49.8604 64.3175C48.9413 63.4443 48.2058 62.3964 47.6971 61.2355C47.1883 60.0745 46.9165 58.8237 46.8977 57.5565V57.5379C46.8935 57.4894 46.8918 57.4408 46.8927 57.3921C46.8926 55.7259 47.328 54.0885 48.1559 52.6422C48.9837 51.1958 50.1753 49.9907 51.6125 49.1461C53.0497 48.3015 54.6829 47.8467 56.35 47.8268C58.0173 47.8069 59.6608 48.2225 61.1178 49.0325C61.153 49.0577 61.1681 49.0677 61.1681 49.0677C62.8389 50.0087 64.1869 51.4312 65.0362 53.1495C65.0412 53.1606 65.048 53.1708 65.0564 53.1797C65.6998 54.4902 66.0336 55.9308 66.0323 57.3906Z" fill="#D1D0FF" />
+                    <path d="M36.3656 28.695C36.3657 30.5651 35.8173 32.3943 34.7881 33.9563C33.7589 35.5182 32.2941 36.7444 30.5748 37.4831C28.8556 38.2218 26.9574 38.4406 25.115 38.1125C23.2726 37.7844 21.5669 36.9237 20.2089 35.637L20.1937 35.6219C19.2746 34.7486 18.5391 33.7008 18.0304 32.5398C17.5216 31.3789 17.2499 30.1281 17.231 28.8608V28.8422C17.2268 28.7938 17.2252 28.7451 17.226 28.6965C17.2259 27.0302 17.6613 25.3929 18.4892 23.9465C19.317 22.5002 20.5086 21.295 21.9458 20.4504C23.3831 19.6058 25.0162 19.151 26.6834 19.1311C28.3506 19.1112 29.9941 19.5268 31.4511 20.3369C31.4863 20.362 31.5015 20.3721 31.5015 20.3721C33.1722 21.313 34.5202 22.7355 35.3696 24.4538C35.3745 24.465 35.3813 24.4752 35.3897 24.484C36.0331 25.7945 36.3669 27.2352 36.3656 28.695Z" fill="#8A88FF" />
+                    <path d="M33.4946 64.0859C33.4948 66.8912 32.6722 69.635 31.1284 71.9779C29.5846 74.3208 27.3873 76.1601 24.8085 77.2681C22.2296 78.3762 19.3823 78.7044 16.6187 78.2122C13.8552 77.72 11.2966 76.4291 9.25955 74.4989L9.23684 74.4763C7.85811 73.1664 6.75494 71.5947 5.99182 69.8532C5.2287 68.1118 4.82104 66.2356 4.79274 64.3347V64.3068C4.78648 64.2341 4.78399 64.1612 4.78527 64.0882C4.78512 61.5888 5.43823 59.1328 6.68001 56.9633C7.9218 54.7938 9.70917 52.986 11.865 51.7191C14.0209 50.4522 16.4705 49.77 18.9713 49.7402C21.4722 49.7103 23.9374 50.3337 26.1229 51.5488C26.1757 51.5865 26.1984 51.6016 26.1984 51.6016C28.7046 53.013 30.7266 55.1467 32.0006 57.7242C32.008 57.7409 32.0182 57.7562 32.0309 57.7695C32.9959 59.7353 33.4967 61.8962 33.4946 64.0859Z" fill="#F70746" />
+                    <path d="M47.8495 43.9995C47.8496 45.3086 47.4657 46.5891 46.7452 47.6825C46.0248 48.7758 44.9994 49.6341 43.7959 50.1512C42.5925 50.6683 41.2637 50.8215 39.974 50.5918C38.6844 50.3621 37.4904 49.7596 36.5398 48.8589L36.5292 48.8484C35.8858 48.2371 35.3709 47.5036 35.0148 46.6909C34.6587 45.8782 34.4685 45.0027 34.4553 44.1156V44.1026C34.4523 44.0687 34.4512 44.0346 34.4518 44.0006C34.4517 42.8342 34.7565 41.688 35.336 40.6756C35.9155 39.6632 36.7496 38.8196 37.7556 38.2283C38.7617 37.6371 39.9049 37.3188 41.0719 37.3048C42.239 37.2909 43.3894 37.5818 44.4093 38.1489C44.434 38.1665 44.4446 38.1735 44.4446 38.1735C45.6141 38.8322 46.5577 39.8279 47.1523 41.0307C47.1557 41.0385 47.1605 41.0457 47.1664 41.0518C47.6167 41.9692 47.8504 42.9777 47.8495 43.9995Z" fill="#F70746" />
+                    <path d="M35.8871 44.9565C32.8757 53.2941 25.6156 49.883 20.0968 51.1739L32.0591 63.6087C33.3968 58.5542 31.8955 51.6838 39.7151 49.2609L35.8871 44.9565Z" stroke="#F70746" stroke-width="4" />
+                    <path d="M33.7401 54.6626C32.7417 55.51 31.6577 56.2123 30.6221 56.6825C29.5866 57.1527 28.6448 57.3703 27.9135 57.3083C27.1822 57.2463 26.6933 56.9075 26.5073 56.3338C26.3214 55.76 26.4465 54.9765 26.8672 54.0802L26.8723 54.0699C27.1583 53.4621 27.5735 52.8177 28.0936 52.1743C28.6136 51.5309 29.2281 50.9015 29.9009 50.3229L29.9108 50.3145C29.9359 50.2916 29.9615 50.2692 29.9877 50.2473C30.8772 49.4924 31.8366 48.8509 32.771 48.3866C33.7054 47.9223 34.5823 47.6512 35.3149 47.6001C36.0476 47.5491 36.6105 47.7198 36.9479 48.0955C37.2853 48.4711 37.3856 49.0386 37.2387 49.7418C37.2322 49.7613 37.2298 49.7694 37.2298 49.7694C37.055 50.5812 36.5598 51.5367 35.809 52.5112C35.804 52.5174 35.7999 52.5236 35.7968 52.5296C35.2233 53.2718 34.5197 54.0015 33.7401 54.6626Z" fill="#F4E6DE" />
+                    <path d="M81.3924 21.0694C81.3926 24.628 80.3492 28.1087 78.3911 31.0809C76.433 34.053 73.6462 36.3863 70.3753 37.7919C67.1044 39.1975 63.493 39.6138 59.9878 38.9895C56.4827 38.3651 53.2375 36.7274 50.6539 34.2789L50.625 34.2502C48.8763 32.5886 47.4771 30.5947 46.5092 28.3855C45.5413 26.1764 45.0243 23.7964 44.9884 21.385V21.3496C44.9804 21.2574 44.9773 21.1648 44.9789 21.0722C44.9787 17.9017 45.8071 14.786 47.3821 12.0338C48.9571 9.28168 51.2241 6.98846 53.9584 5.3813C56.6928 3.77413 59.7999 2.90876 62.9717 2.87087C66.1437 2.83297 69.2705 3.62387 72.0425 5.16526C72.1095 5.21308 72.1383 5.23222 72.1383 5.23222C75.3169 7.02271 77.8815 9.72947 79.4974 12.9992C79.5068 13.0203 79.5197 13.0398 79.5358 13.0566C80.7598 15.5503 81.3949 18.2916 81.3924 21.0694Z" fill="#3381F5" />
+                    <path d="M53.8369 36.4887C52.8385 37.3361 51.7545 38.0383 50.7189 38.5086C49.6833 38.9788 48.7416 39.1964 48.0103 39.1344C47.2789 39.0724 46.79 38.7336 46.6041 38.1599C46.4181 37.5861 46.5432 36.8026 46.964 35.9063L46.9691 35.8959C47.2551 35.2882 47.6703 34.6438 48.1904 34.0004C48.7104 33.357 49.3249 32.7276 49.9977 32.149L50.0076 32.1406C50.0327 32.1177 50.0583 32.0953 50.0845 32.0734C50.974 31.3184 51.9334 30.677 52.8678 30.2127C53.8022 29.7484 54.6791 29.4773 55.4117 29.4262C56.1443 29.3752 56.7072 29.5459 57.0446 29.9215C57.3821 30.2972 57.4823 30.8647 57.3355 31.5679C57.329 31.5874 57.3266 31.5955 57.3266 31.5955C57.1517 32.4073 56.6566 33.3628 55.9057 34.3373C55.9008 34.3435 55.8966 34.3497 55.8936 34.3556C55.3201 35.0979 54.6164 35.8276 53.8369 36.4887Z" fill="#F4E6DE" />
+                </g>
+            </svg>
+
+        </div>
+        <a href="/">Cromalette</a>
     </div>
-</div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+    <div class="navbar-links">
+        <a href="/home">Home</a>
+        <a href="/weather">Detector</a>
+        <a href="/counter">Colors</a>
+    </div>
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
+    <div class="navbar-user-info">
+        @if (isAuthenticated)
+        {
+            <div class="user-info">
+                <div class="user-level">
+                    <div class="level-badge">LVL @UserLevelState.LevelId</div>
+                </div>
+                <div class="user-points">
+                    <div class="points-badge">XP @UserLevelState.CurrentXP</div>
+                </div>
+                <div class="user-avatar" @onclick="ToggleDropdown">
+                    <img src="@userAvatarUrl" alt="User Avatar" />
+                </div>
+            </div>
+            @if (showDropdown)
+            {
+                <div class="dropdown">
+                    <ul>
+                        <li>
+                            <button @onclick="Logout" class="logout-button">Logout</button>
+                        </li>
+                    </ul>
+                </div>
+            }
+        }
+        else
+        {
+            <a href="/login" class="login-button">Login</a>
+        }
+    </div>
+</nav>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
+@code {
+    private bool isAuthenticated { get; set; }
+    private int _userId { get; set; }
+    private UserLevel _userLevel { get; set; }
+    private string userAvatarUrl = string.Empty;
+    private bool showDropdown { get; set; }
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await LocalStorage.GetItemAsync<string>("token");
+        if (token != null)
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            isAuthenticated = authState.User.Identity.IsAuthenticated;
 
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+            _userId = int.Parse(jwt.Claims.First(c => c.Type == "Id").Value);
+        }
+
+        if (isAuthenticated)
+        {
+            _userLevel = await UserLevelService.GetUserLevel(_userId);
+            UserLevelState.SetUserLevel(_userLevel.LevelId, _userLevel.CurrentXP);
+            userAvatarUrl = GetRandomAvatarUrl();
+        }
+
+        UserLevelState.OnChange += StateHasChanged;
+    }
+
+    private void ToggleDropdown()
+    {
+        showDropdown = !showDropdown;
+    }
+
+    private async Task Logout()
+    {
+        await LocalStorage.RemoveItemAsync("token");
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = false;
+        showDropdown = false;
+        Navigation.NavigateTo("/login");
+    }
+
+    private string GetRandomAvatarUrl()
+    {
+        return $"https://api.multiavatar.com/{_userId}.svg";
+    }
+
+
+    public void Dispose()
+    {
+        UserLevelState.OnChange -= StateHasChanged;
+    }
+}

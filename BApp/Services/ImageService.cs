@@ -25,7 +25,8 @@ namespace BApp.Services
             var response = await _httpClient.PostAsync("plot", content);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsStringAsync();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<string>(jsonResponse);
         }
 
         public async Task<List<string>> GetColors(IBrowserFile file)

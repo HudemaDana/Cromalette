@@ -13,43 +13,41 @@
 @inject ILocalStorageService LocalStorage
 
 <div class="container">
-@*     <div class="user-info-container">
-        <div>Total discovered: 25 </div>
-        <div>Total xp: 150.000</div>
-    </div> *@
+
     <div class="list-container">
-        <div class="row">
-            @foreach (var userColor in _userColorList)
-            {
-                <div class="col-md-3 mb-5 py-3">
-                    <ListItem Color="listItem" @* OnClick="ShowItemDetails(listItem) *@" />
-                </div>
-            }
+        <div class="card">
+            <div class="row">
+                @foreach (var userColor in _userColorList)
+                {
+                    <div class="col-md-3 mb-5 py-3">
+                        <ListItem Color="@userColor" OnClick="ShowColorDetails" />
+                    </div>
+                }
+            </div>
         </div>
     </div>
 
-   @*  <DetailsModal SelectedItem="SelectedItem" OnClose="CloseModal" /> *@
+    <DetailsModal UserColor="SelectedItem" IsVisible="isModalVisible" OnClose="CloseModal" />
 
 </div>
 
-
 @code {
 
+    private bool isModalVisible { get; set; } = false;
     private int _userId { get; set; }
-
+    private UserColor SelectedItem { get; set; } = new UserColor();
     private List<UserColor> _userColorList { get; set; } = new List<UserColor>();
 
     protected override async Task OnInitializedAsync()
     {
         var token = await LocalStorage.GetItemAsync<string>("token");
-
         if (token != null)
         {
             await authStateProvider.GetAuthenticationStateAsync();
-
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
             _userId = int.Parse(jwt.Claims.First(c => c.Type == "Id").Value);
         }
+        await GetUserColors();
     }
 
     private async Task GetUserColors()
@@ -57,13 +55,19 @@
         _userColorList = await UserColorService.GetUserColorsByUserId(_userId);
     }
 
-    // private void ShowItemDetails(ListItemModel item)
-    // {
-    //     SelectedItem = item;
-    // }
 
-    // private void CloseModal()
-    // {
-    //     SelectedItem = null;
-    // }
+    private void CloseModal()
+    {
+        isModalVisible = false;
+    }
+
+    private void ShowColorDetails(UserColor color)
+    {
+
+        if (color != null)
+        {
+            SelectedItem = color;
+            isModalVisible = true;
+        }
+    }
 }

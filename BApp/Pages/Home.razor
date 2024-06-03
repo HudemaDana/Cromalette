@@ -6,26 +6,54 @@
 
 
 <div class="home-page-container">
-    <div class="redirection-to-scanner">
-        <h1> SCAN AND GO</h1>
-        <img src="down_arrow.png" alt="Down Arrow" class="down-arrow" @onclick="RedirectToScanSection" />
-    </div>
+    <h1>Welcome, User!</h1>
     <div class="user-stats-container">
-        <div class="first-grid-section card">
-            <h3> This section is gonna have user basic info - current level, last color found, the most difficult found until now, if the user has a strike of days or no</h3>
-            <XpProgressBar CurrentXp="150" TotalXp="300" />
+        <div class="card first-grid-section">
+            <p class="status">Status: <span class="level">Level 1</span></p>
+            <div class="badge">
+                <img src="badge1.png" alt="Badge 1" />
+                <p>Beginner</p>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" style="width: 50%;"></div>
+            </div>
         </div>
-        <div class="second-grid-section card">
-            <h5> this section will be an extension for the first one - maybe first section with level and strikes and second filters about colors</h5>
+        <div class="card second-grid-section">
+            <p class="status">Status: <span class="level">Level 2</span></p>
+            <div class="badge">
+                <img src="badge2.png" alt="Badge 2" />
+                <p>Intermediate</p>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" style="width: 30%;"></div>
+            </div>
         </div>
-        <div class="third-grid-section card">
-            <h5> here a cute redirection to the user color collections  </h5>
+        <div class="card third-grid-section">
+            <p class="status">Status: <span class="level">Level 3</span></p>
+            <div class="badge">
+                <img src="badge3.png" alt="Badge 3" />
+                <p>Advanced</p>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" style="width: 70%;"></div>
+            </div>
         </div>
-        <div class="forth-grid-section card">
-            <h5> This section will contain a month graph of activity</h5>
+        <div class="card forth-grid-section">
+            <p class="status">Status: <span class="level">Level 4</span></p>
+            <div class="badge">
+                <img src="badge4.png" alt="Badge 4" />
+                <p>Expert</p>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" style="width: 90%;"></div>
+            </div>
         </div>
+    </div>
+    <div class="redirection-to-scanner">
+        <p>Go to Scanner</p>
     </div>
 </div>
+
 
 @code {
     private void RedirectToScanSection()

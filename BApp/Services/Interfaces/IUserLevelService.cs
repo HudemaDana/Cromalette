@@ -9,5 +9,7 @@ namespace BApp.Services.Interfaces
         Task DeleteUserLevelOnUserDelete(int userId);
 
         Task UpdateUserLevelOnColorSave(UserColor userColor);
+
+        Task<UserLevel> GetUserLevel(int userId);
     }
 }

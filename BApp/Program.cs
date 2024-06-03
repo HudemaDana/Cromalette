@@ -23,6 +23,7 @@ var pythonClient = new HttpClient
 
 builder.Services.AddSingleton(dotNetClient);
 builder.Services.AddSingleton(pythonClient);
+builder.Services.AddSingleton<UserLevelState>();
 
 builder.Services.AddScoped<IImageService>(sp => new ImageService(pythonClient));
 builder.Services.AddScoped<IColorService>(sp => new ColorService(dotNetClient));

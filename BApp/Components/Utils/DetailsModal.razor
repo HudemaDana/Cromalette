@@ -1,53 +1,54 @@
-﻿@using System.Collections.Generic
+﻿@using BApp.Components.PaletteExtractor
 @using BApp.Domain.Models
-@using static BApp.Components.ColorList.ListTemplate
 
-@if (SelectedItem != null)
-{
-  @*   <div class="modal">
-        <div class="modal-content">
-            <span class="close" @onclick="CloseModal">&times;</span>
-            <h2>@SelectedItem.Title</h2>
-            <p>Discovery Date: @SelectedItem.Date.ToShortDateString()</p>
-            <p>Difficulty: @SelectedItem.Difficulty</p>
-            <p>Points: @SelectedItem.Xp</p>
-            <div>
-                <h3>Tints</h3>
-                @foreach (var tint in SelectedItem.Tints)
-                {
-                    <div>@tint</div>
-                }
-            </div>
-            <div>
-                <h3>Shades</h3>
-                @foreach (var shade in SelectedItem.Shades)
-                {
-                    <div>@shade</div>
-                }
-            </div>
-            <div>
-                <h3>Palettes</h3>
-                @foreach (var palette in SelectedItem.Palettes)
-                {
-                    <div>@palette</div>
-                }
+
+<div class="modal" style="display:@(IsVisible ? "block" : "none")">
+    <div class="modal-content">
+        <span class="close" @onclick="Close">&times;</span>
+        <div class="modal-header">
+            <h2>COLOR DETAILS</h2>
+            <p>Date: @UserColor.SavingDate, HEX:@UserColor.ColorHexValue</p>
+        </div>
+        <div class="modal-body">
+
+            <ColorExtension ColorHex="@UserColor.ColorHexValue" />
+
+            <h3>Palettes</h3>
+            <div id="colorPalettes">
+                <!-- Color palettes will be displayed here -->
             </div>
         </div>
-    </div> *@
-}
+    </div>
+</div>
+
 
 @code {
-
+    [Parameter]
+    public UserColor UserColor { get; set; }
 
     [Parameter]
-    public UserColor SelectedItem { get; set; }
+    public bool IsVisible { get; set; }
 
     [Parameter]
     public EventCallback OnClose { get; set; }
 
-    private void CloseModal()
+    private void Close()
     {
-        SelectedItem = null;
         OnClose.InvokeAsync();
     }
+
+    // protected override async Task OnParametersSetAsync()
+    // {
+    //     if (IsVisible)
+    //     {
+    //         // Fetch color details from the backend
+    //         await FetchColorDetails();
+    //     }
+    // }
+
+    // private async Task FetchColorDetails()
+    // {
+    //     // Simulate fetching data from backend
+    //     await Task.Delay(1000); // Replace with actual API call
+    // }
 }

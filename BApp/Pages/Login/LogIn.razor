@@ -60,7 +60,7 @@
             await authStateProvider.GetAuthenticationStateAsync();
 
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
-            var role = jwt.Claims.First(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;
+            //var role = jwt.Claims.First(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;
         }
     }
 
