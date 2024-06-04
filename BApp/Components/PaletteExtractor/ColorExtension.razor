@@ -2,10 +2,12 @@
 
 @using System.Drawing
 @using System.Linq
+@using BApp.Components.Utils
 @using BApp.Services.Interfaces
 @using ColorName
 
 @inject IColorService ColorService
+@inject IJSRuntime _jsRuntime
 
 <div class="color-extension">
     @if (!string.IsNullOrEmpty(ColorHex))
@@ -13,18 +15,6 @@
         <div class="color-details">
             <h2 class="color-name">@ColorNameProvider.GetColorNameFromHex(ColorHex).colorName</h2>
             <p class="color-rgb">@_rgb</p>
-
-            <div class="selectors">
-                <div class="selector">
-                    <label for="shadeCount">Number of Shades/Tints:</label>
-                    <select id="shadeCount" @onchange="OnShadeCountChanged">
-                        @for (int i = 5; i <= 9; i++)
-                        {
-                            <option value="@i">@i</option>
-                        }
-                    </select>
-                </div>
-            </div>
 
             <div class="color-bars">
                 <div>
@@ -52,15 +42,26 @@
                         }
                     </div>
                 </div>
-            </div>
 
-            <div class="selected-color-value">
-                <h3>Selected Color Value</h3>
-                <p>@selectedColorValue</p>
+                <div>
+                    <h3>Tones</h3>
+                    <div class="color-bar">
+                        @for (int i = 0; i < 9; i++)
+                        {
+                            var color = i < _tints.Count ? _tones[i] : "#e0e0e0";
+                            <div class="color-block" style="background-color: @color" @onclick="() => OnColorClicked(color)">
+                                <span class="color-hex">@color</span>
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     }
 </div>
+
+<CustomToast @ref="toast" Title="Success!" Message="Color hex copied to clipboard!" />
+
 
 @code {
     [Parameter]
@@ -75,6 +76,9 @@
 
     private List<string> _shades { get; set; } = new List<string>();
     private List<string> _tints { get; set; } = new List<string>();
+    private List<string> _tones { get; set; } = new List<string>();
+
+    private CustomToast toast;
 
     protected override async Task OnInitializedAsync()
     {
@@ -101,23 +105,17 @@
         _rgb = $"RGB: ({_color.R}, {_color.G}, {_color.B})";
 
         _shades = await ColorService.GenerateShades(ColorHex, _shadeCount);
-        _shades.OrderDescending();
-
         _tints = await ColorService.GenerateTints(ColorHex, _shadeCount);
-        _tints.OrderDescending();
+        _tones = await ColorService.GenerateTones(ColorHex, _shadeCount);
     }
 
-    private void OnColorClicked(string colorHex)
+    private async Task OnColorClicked(string colorHex)
     {
         if (!string.IsNullOrEmpty(colorHex) && colorHex != "#e0e0e0")
         {
-            var color = ColorTranslator.FromHtml(colorHex);
-            selectedColorValue = selectedValueType switch
-            {
-                "rgb" => $"RGB: ({color.R}, {color.G}, {color.B})",
-                "hsv" => $"HSV: ({color.GetHue()}, {color.GetSaturation() * 100}%, {color.GetBrightness() * 100}%)",
-                _ => colorHex,
-            };
+            await _jsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", colorHex);
+            toast.ShowToast();
+
         }
         else
         {

@@ -22,11 +22,16 @@ namespace BApp.Services
             fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
             content.Add(fileContent, "file", file.Name);
 
-            var response = await _httpClient.PostAsync("plot", content);
-            response.EnsureSuccessStatusCode();
+            var response = await _httpClient.PostAsync("upload", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var plotResponse = JsonSerializer.Deserialize<string>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return plotResponse;
 
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<string>(jsonResponse);
+            }
+
+            return null;
         }
 
         public async Task<List<string>> GetColors(IBrowserFile file)

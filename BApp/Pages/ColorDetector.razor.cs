@@ -77,7 +77,7 @@ namespace BApp.Pages
                 if (file != null)
                 {
                     colors = await ImageService.GetColors(file);
-                    //plotUrl = await ImageService.GetPaletteColors(file);
+                    plotUrl = await ImageService.GetPaletteColors(file);
 
 
                     // Read the image data into a buffer asynchronously

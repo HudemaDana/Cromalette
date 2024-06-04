@@ -64,7 +64,7 @@
 .color-bar {
     display: flex;
     flex-wrap: wrap;
-    width: 75%;
+    width: 70%;
 }
 
 .color-block {
@@ -83,7 +83,7 @@
     }
 
 .color-hex {
-    font-size: 12px;
+    font-size:12px;
     display: none;
     position: absolute;
     bottom: 0;

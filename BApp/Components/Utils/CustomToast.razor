@@ -1,0 +1,46 @@
+﻿<div class="toast @ToastClass" style="display: @(Visible ? "block" : "none")">
+    <div class="toast-header">
+        <strong class="mr-auto">@Title</strong>
+        <button type="button" class="ml-2 mb-1 close" @onclick="HideToast">
+            <span>&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        @Message
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Message { get; set; }
+
+    [Parameter]
+    public string ToastClass { get; set; } = "toast-success";
+
+    [Parameter]
+    public int Duration { get; set; } = 3000;
+
+    private bool Visible { get; set; } = false;
+
+    public void ShowToast()
+    {
+        Visible = true;
+        StateHasChanged();
+        _ = HideToastAfterDelay();
+    }
+
+    private async Task HideToastAfterDelay()
+    {
+        await Task.Delay(Duration);
+        HideToast();
+    }
+
+    private void HideToast()
+    {
+        Visible = false;
+        StateHasChanged();
+    }
+}

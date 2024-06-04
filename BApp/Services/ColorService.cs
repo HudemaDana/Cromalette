@@ -24,5 +24,17 @@ namespace BApp.Services
             return await _httpClient.GetFromJsonAsync<List<string>>($"colors/shades?hexColor={hexValue}&count={count}");
         }
 
+        public async Task<List<string>> GenerateTones(string hexColor, int count)
+        {
+            var hexValue = "%23" + hexColor.Substring(1);
+            return await _httpClient.GetFromJsonAsync<List<string>>($"colors/tones?hexColor={hexValue}&count={count}");
+        }
+        
+        public async Task<List<string>> GenerateColorPalette(string hexColor, int ruleNr)
+        {
+            var hexValue = "%23" + hexColor.Substring(1);
+            return await _httpClient.GetFromJsonAsync<List<string>>($"colors/palette?hexColor={hexValue}&ruleNr={ruleNr}");
+        }
+
     }
 }

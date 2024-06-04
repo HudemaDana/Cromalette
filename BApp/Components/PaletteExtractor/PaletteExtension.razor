@@ -1,5 +1,111 @@
-﻿<h3>PaletteExtension</h3>
+﻿@page "/color-palette-details"
+
+@using System.Collections.Generic
+@using BApp.Components.Utils
+@using BApp.Services.Interfaces
+
+@inject IJSRuntime JSRuntime
+@inject IColorService ColorService
+
+<div class="color-extension">
+    @if (!string.IsNullOrEmpty(ColorHex))
+    {
+        <div class="color-details">
+
+            <div class="color-bars">
+                <div>
+                    <h3>Complementary</h3>
+                    <div class="color-bar">
+                        @foreach (var color in _complementaryColors)
+                        {
+                            <div class="color-block" style="background-color: @color" @onclick="() => OnColorClicked(color)">
+                                <span class="color-hex">@color</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Analogous</h3>
+                    <div class="color-bar">
+                        @foreach (var color in _analogousColors)
+                        {
+                            <div class="color-block" style="background-color: @color" @onclick="() => OnColorClicked(color)">
+                                <span class="color-hex">@color</span>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+
+                <div>
+                    <h3>Triadic</h3>
+                    <div class="color-bar">
+                        @foreach (var color in _triadicColors)
+                        {
+                            <div class="color-block" style="background-color: @color" @onclick="() => OnColorClicked(color)">
+                                <span class="color-hex">@color</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Tetradic</h3>
+                    <div class="color-bar">
+                        @foreach (var color in _tetradicColors)
+                        {
+                            <div class="color-block" style="background-color: @color" @onclick="() => OnColorClicked(color)">
+                                <span class="color-hex">@color</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<CustomToast @ref="toast" Title="Success!" Message="Color hex copied to clipboard!" />
 
 @code {
+    [Parameter]
+    public string ColorHex { get; set; }
 
+    private string _rgb { get; set; }
+    private Color _color { get; set; }
+
+    private List<string> _complementaryColors { get; set; } = new List<string>();
+    private List<string> _analogousColors { get; set; } = new List<string>();
+    private List<string> _triadicColors { get; set; } = new List<string>();
+    private List<string> _tetradicColors { get; set; } = new List<string>();
+
+    private CustomToast toast;
+
+    protected override void OnInitialized()
+    {
+        LoadColors();
+    }
+
+    protected override void OnParametersSet()
+    {
+        LoadColors();
+    }
+
+    private async Task LoadColors()
+    {
+        _color = Color.FromHex(ColorHex);
+        _rgb = $"RGB: ({_color.R}, {_color.G}, {_color.B})";
+
+        _complementaryColors = await ColorService.GenerateColorPalette(ColorHex, 1);
+        _analogousColors = await ColorService.GenerateColorPalette(ColorHex, 2);
+        _triadicColors = await ColorService.GenerateColorPalette(ColorHex, 3);
+        _tetradicColors = await ColorService.GenerateColorPalette(ColorHex, 4);
+    }
+
+    private async Task OnColorClicked(string colorHex)
+    {
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", colorHex);
+        toast.ShowToast();
+    }
 }

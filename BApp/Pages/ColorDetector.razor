@@ -54,6 +54,10 @@
                             }
                         </div>
                     </div>
+                    @if (!string.IsNullOrEmpty(plotUrl))
+                    {
+                        @((MarkupString)plotUrl)
+                    }
 
                     @if (colors.Any() && !string.IsNullOrEmpty(selectedColor))
                     {
@@ -65,17 +69,12 @@
             </div>
         </div>
 
+
         @if (!string.IsNullOrEmpty(selectedColor))
         {
             <ColorExtension ColorHex="@selectedColor" />
+            <PaletteExtension ColorHex="@selectedColor" />
+        }
 
-        }
-        @if (!string.IsNullOrEmpty(plotUrl))
-        {
-            <div class="color-plot">
-                <h3>Color Plot</h3>
-                <img src="@plotUrl" alt="Color Plot" />
-            </div>
-        }
     </div>
 </div>

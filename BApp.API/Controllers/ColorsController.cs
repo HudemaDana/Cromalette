@@ -27,5 +27,19 @@ namespace BApp.API.Controllers
             var shades = await _colorService.GenerateShades(hexColor, count);
             return Ok(shades);
         }
+
+        [HttpGet("tones")]
+        public async Task<ActionResult<List<string>>> GenerateTonesAsync([FromQuery] string hexColor, [FromQuery] int count)
+        {
+            var tones = await _colorService.GenerateTones(hexColor, count);
+            return Ok(tones);
+        }
+
+        [HttpGet("palette")]
+        public async Task<ActionResult<List<string>>> GeneratePalette([FromQuery] string hexColor, [FromQuery] int ruleNr)
+        {
+            var palette = await _colorService.GeneratePalette(hexColor, ruleNr);
+            return Ok(palette);
+        }
     }
 }

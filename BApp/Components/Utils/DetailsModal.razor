@@ -1,5 +1,5 @@
-﻿@using BApp.Components.PaletteExtractor
-@using BApp.Domain.Models
+﻿    @using BApp.Components.PaletteExtractor
+    @using BApp.Domain.Models
 
 
 <div class="modal" style="display:@(IsVisible ? "block" : "none")">
@@ -12,11 +12,7 @@
         <div class="modal-body">
 
             <ColorExtension ColorHex="@UserColor.ColorHexValue" />
-
-            <h3>Palettes</h3>
-            <div id="colorPalettes">
-                <!-- Color palettes will be displayed here -->
-            </div>
+            <PaletteExtension ColorHex="@UserColor.ColorHexValue" />
         </div>
     </div>
 </div>
@@ -36,19 +32,4 @@
     {
         OnClose.InvokeAsync();
     }
-
-    // protected override async Task OnParametersSetAsync()
-    // {
-    //     if (IsVisible)
-    //     {
-    //         // Fetch color details from the backend
-    //         await FetchColorDetails();
-    //     }
-    // }
-
-    // private async Task FetchColorDetails()
-    // {
-    //     // Simulate fetching data from backend
-    //     await Task.Delay(1000); // Replace with actual API call
-    // }
 }
