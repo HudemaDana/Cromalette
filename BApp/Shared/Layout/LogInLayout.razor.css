@@ -15,7 +15,7 @@ main {
 
 .content {
     padding: 0px !important;
-    background: linear-gradient(to bottom, #92ADF9 0%, #98DCF9 50%, #ffffff 90%);
+    background: linear-gradient(to bottom right, #92adf9, #aed6f1);
     height: 100vh;
     display: flex;
     justify-content: center;

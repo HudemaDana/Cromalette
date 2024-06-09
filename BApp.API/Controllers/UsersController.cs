@@ -18,11 +18,11 @@ namespace BApp.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUser(int id)
+        public async Task<IActionResult> GetUser(int id)
         {
             try
             {
-                var user = _userService.GetUserById(id);
+                var user = await _userService.GetUserById(id);
                 return Ok(user);
             }
             catch (Exception exception)
@@ -46,7 +46,6 @@ namespace BApp.API.Controllers
                     UserLevel = null,
 
                 };
-                //TODO: mapper from userDto to user
                 await _userService.CreateUser(user);
                 return Ok();
             }

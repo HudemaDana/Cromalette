@@ -1,0 +1,74 @@
+﻿@using System.Timers
+
+@inject IJSRuntime _jsRuntime
+
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" @ref="carouselRef">
+    <div class="carousel-indicators">
+        @for (int i = 0; i < Slides.Count; i++)
+        {
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)"></button>
+        }
+    </div>
+    <div class="carousel-inner">
+        @foreach (var slide in Slides)
+        {
+            <div class="carousel-item @(slide.IsActive ? "active" : "")">
+                <div class="d-block w-100 slide-content" style="background-color: @slide.BackgroundColor;">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>@slide.Title</h5>
+                        <p>@slide.Description</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+@code {
+    private Timer timer;
+    private ElementReference carouselRef;
+
+    protected override void OnInitialized()
+    {
+        timer = new Timer(5000); // Set to 5 seconds
+        timer.Elapsed += SlideToNext;
+        timer.Start();
+    }
+
+    private void SlideToNext(object source, ElapsedEventArgs e)
+    {
+        InvokeAsync(async () =>
+        {
+            await _jsRuntime.InvokeVoidAsync("blazorSlideNext", carouselRef);
+        });
+    }
+
+    public List<Slide> Slides { get; set; } = new List<Slide>
+    {
+        new Slide { Title = "Palette Meaning", Description = "Description about Palette.", BackgroundColor = "#ffdddd", IsActive = true },
+        new Slide { Title = "Tint Meaning", Description = "Description about Tint.", BackgroundColor = "#ddffdd" },
+        new Slide { Title = "Shade Meaning", Description = "Description about Shade.", BackgroundColor = "#ddddff" },
+        new Slide { Title = "Tone Meaning", Description = "Description about Tone.", BackgroundColor = "#ffffdd" },
+        new Slide { Title = "Complementary Palette", Description = "Description about Complementary Palette.", BackgroundColor = "#ddffff" },
+        new Slide { Title = "Analogous Palette", Description = "Description about Analogous Palette.", BackgroundColor = "#ffddff" },
+        new Slide { Title = "Triadic Palette", Description = "Description about Triadic Palette.", BackgroundColor = "#ffdd99" },
+        new Slide { Title = "Quadratic Palette", Description = "Description about Quadratic Palette.", BackgroundColor = "#99ddff" }
+    };
+
+    public class Slide
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string BackgroundColor { get; set; }
+        public bool IsActive { get; set; }
+    }
+}
+

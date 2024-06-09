@@ -1,0 +1,132 @@
+﻿@page "/user-profile"
+
+@using BApp.Domain.Models
+@using BApp.Services.Interfaces
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.IdentityModel.Tokens.Jwt
+
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IUserService UserService
+@inject ILocalStorageService LocalStorage
+
+<div class="profile-container">
+
+    <div class="profile-card">
+        <div class="profile-header">
+            <h2>User Profile</h2>
+            <img class="profile-avatar" src="@userAvatarUrl" alt="User Avatar" />
+        </div>
+
+        <div class="xp-bar-container">
+            <label>XP: @User.UserLevel.CurrentXP / @NextLevelXP</label>
+            <div class="xp-bar">
+                <div class="xp-bar-fill" style="width: @((double)User.UserLevel.CurrentXP / NextLevelXP * 100)%"></div>
+            </div>
+            <p>@(NextLevelXP - User.UserLevel.CurrentXP) XP until next level: LVL @(User.UserLevel.LevelId + 1)</p>
+        </div>
+
+        <div class="profile-info">
+            <label for="username">Username:</label>
+            <input type="text" id="username" @bind="User.Username" />
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" @bind="User.Email" />
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" @bind="User.Password" />
+        </div>
+
+        <div class="action-buttons">
+            <button class="delete-button" @onclick="ShowDeleteConfirmation">Delete User</button>
+            <button class="save-button" @onclick="SaveChanges">Save Changes</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal" style="display:@(ShowModal ? "block" : "none")" @onclick="HideModal">
+    <div class="modal-content" @onclick:stopPropagation="true">
+        <span class="close" @onclick="HideModal">&times;</span>
+        <div class="modal-header">
+            <h2>Confirm Deletion</h2>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete your account?</p>
+            <button class="confirm-button" @onclick="DeleteUser">Yes</button>
+            <button class="cancel-button" @onclick="HideModal">No</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private User User { get; set; } = new User();
+    private bool ShowModal { get; set; } = false;
+    private int NextLevelXP { get; set; }
+    private bool isAuthenticated { get; set; }
+    private string userAvatarUrl = string.Empty;
+    private int _userId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await LocalStorage.GetItemAsync<string>("token");
+        if (token != null)
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            isAuthenticated = authState.User.Identity.IsAuthenticated;
+
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+            _userId = int.Parse(jwt.Claims.First(c => c.Type == "Id").Value);
+        }
+
+        if (isAuthenticated)
+        {
+            User = await UserService.GetUserById(_userId);
+            NextLevelXP = User.UserLevel.Level.LevelTotalXP;
+            userAvatarUrl = GetRandomAvatarUrl();
+        }
+    }
+
+    private async Task SaveChanges()
+    {
+        await UserService.UpdateUser(_userId, User);
+        Navigation.NavigateTo("/home");
+    }
+
+    private string GetRandomAvatarUrl()
+    {
+        return $"https://api.multiavatar.com/{_userId}.svg";
+    }
+
+    private void ShowDeleteConfirmation()
+    {
+        ShowModal = true;
+    }
+
+    private void HideModal()
+    {
+        ShowModal = false;
+    }
+
+    private async Task DeleteUser()
+    {
+        try
+        {
+            await UserService.DeleteUser(_userId);
+            await Logout();
+        }
+        catch (Exception ex)
+        {
+            // Handle exception, e.g., show error message
+        }
+    }
+
+    private async Task Logout()
+    {
+        await LocalStorage.RemoveItemAsync("token");
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = false;
+        Navigation.NavigateTo("/login");
+    }
+}

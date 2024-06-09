@@ -90,15 +90,6 @@
         await LoadColors();
     }
 
-    private async Task OnShadeCountChanged(ChangeEventArgs e)
-    {
-        if (int.TryParse(e.Value.ToString(), out int newCount))
-        {
-            _shadeCount = newCount;
-            await LoadColors();
-        }
-    }
-
     private async Task LoadColors()
     {
         _color = ColorTranslator.FromHtml(ColorHex);

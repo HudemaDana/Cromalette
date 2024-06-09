@@ -4,7 +4,7 @@ namespace BApp.Services.Interfaces
 {
     public interface IUserService
     {
-        User GetUserById(int id);
+        Task<User> GetUserById(int id);
         Task CreateUser(User user);
         Task UpdateUser(int id, User user);
         Task DeleteUser(int Id);

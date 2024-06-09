@@ -1,63 +1,42 @@
 ﻿@page "/home"
 @using BApp.Components.Home
 
-
 @inject NavigationManager NavigationManager
-
 
 <div class="home-page-container">
     <h1>Welcome, User!</h1>
+    <div class="carousel-container">
+        <Carousel />
+    </div>
     <div class="user-stats-container">
-        <div class="card first-grid-section">
-            <p class="status">Status: <span class="level">Level 1</span></p>
-            <div class="badge">
-                <img src="badge1.png" alt="Badge 1" />
-                <p>Beginner</p>
-            </div>
+        <div class="info-card">
+            <h2>User XP</h2>
             <div class="progress-bar">
                 <div class="progress" style="width: 50%;"></div>
             </div>
+            <p>Current XP: 500 / 1000</p>
         </div>
-        <div class="card second-grid-section">
-            <p class="status">Status: <span class="level">Level 2</span></p>
-            <div class="badge">
-                <img src="badge2.png" alt="Badge 2" />
-                <p>Intermediate</p>
-            </div>
-            <div class="progress-bar">
-                <div class="progress" style="width: 30%;"></div>
-            </div>
+        <div class="info-card">
+            <h2>Last Color Found</h2>
+            <p>#FF5733</p>
         </div>
-        <div class="card third-grid-section">
-            <p class="status">Status: <span class="level">Level 3</span></p>
-            <div class="badge">
-                <img src="badge3.png" alt="Badge 3" />
-                <p>Advanced</p>
-            </div>
-            <div class="progress-bar">
-                <div class="progress" style="width: 70%;"></div>
-            </div>
+        <div class="info-card">
+            <h2>Most Difficult Color</h2>
+            <p>#123456</p>
         </div>
-        <div class="card forth-grid-section">
-            <p class="status">Status: <span class="level">Level 4</span></p>
-            <div class="badge">
-                <img src="badge4.png" alt="Badge 4" />
-                <p>Expert</p>
-            </div>
-            <div class="progress-bar">
-                <div class="progress" style="width: 90%;"></div>
-            </div>
+        <div class="info-card">
+            <h2>Current Strike</h2>
+            <p>5 Colors</p>
         </div>
     </div>
-    <div class="redirection-to-scanner">
+@*     <div class="redirection-to-scanner" @onclick="RedirectToScanSection">
         <p>Go to Scanner</p>
-    </div>
+    </div> *@
 </div>
-
 
 @code {
     private void RedirectToScanSection()
     {
-        NavigationManager.NavigateTo("/weather");
+        NavigationManager.NavigateTo("/scanner");
     }
 }

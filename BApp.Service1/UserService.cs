@@ -23,11 +23,19 @@ namespace BApp.Services
             _configuration = configuration;
         }
 
-        public User GetUserById(int id)
+        public async Task<User> GetUserById(int id)
         {
             var user = _dbContext.Users.Find(id);
+
             if (user != null)
+            {
+                var userLevel = _dbContext.UserLevels.FirstOrDefault(ul => ul.UserId == id);
+                var level = _dbContext.Levels.FirstOrDefault(l => l.Id == userLevel.LevelId);
+                userLevel.User = null;
+                userLevel.Level = level;
+                user.UserLevel = userLevel;
                 return user;
+            }
             else
             {
                 throw new Exception("The user was not found");

@@ -18,10 +18,11 @@
     }
 
     .custom-button.login {
-        background-color: #F6775B;
+        background-color: #e94560;
         height: 3.5rem;
         width: 10rem;
         padding-bottom: 0px !important;
+        color: white;
     }
 
     .custom-button.landing {

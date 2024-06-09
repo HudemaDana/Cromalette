@@ -58,6 +58,9 @@
                 <div class="dropdown">
                     <ul>
                         <li>
+                            <button @onclick="GoToUserProfile" class="logout-button">Profile</button>
+                        </li>
+                        <li>
                             <button @onclick="Logout" class="logout-button">Logout</button>
                         </li>
                     </ul>
@@ -112,6 +115,11 @@
         isAuthenticated = false;
         showDropdown = false;
         Navigation.NavigateTo("/login");
+    }
+
+    private void GoToUserProfile()
+    {
+        Navigation.NavigateTo("/user-profile");
     }
 
     private string GetRandomAvatarUrl()

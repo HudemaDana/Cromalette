@@ -13,7 +13,7 @@
         <div class="color-details">
 
             <div class="color-bars">
-                <div>
+                <div class="palette-container">
                     <h3>Complementary</h3>
                     <div class="color-bar">
                         @foreach (var color in _complementaryColors)
@@ -25,7 +25,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="palette-container">
                     <h3>Analogous</h3>
                     <div class="color-bar">
                         @foreach (var color in _analogousColors)
@@ -38,7 +38,7 @@
 
                 </div>
 
-                <div>
+                <div class="palette-container">
                     <h3>Triadic</h3>
                     <div class="color-bar">
                         @foreach (var color in _triadicColors)
@@ -50,7 +50,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="palette-container">
                     <h3>Tetradic</h3>
                     <div class="color-bar">
                         @foreach (var color in _tetradicColors)
@@ -82,14 +82,14 @@
 
     private CustomToast toast;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        LoadColors();
+        await LoadColors();
     }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        LoadColors();
+        await LoadColors();
     }
 
     private async Task LoadColors()
