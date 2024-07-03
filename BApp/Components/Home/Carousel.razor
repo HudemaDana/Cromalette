@@ -1,8 +1,7 @@
 ﻿@using System.Timers
-
 @inject IJSRuntime _jsRuntime
 
-<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" @ref="carouselRef">
+<div id="carouselExampleIndicators" class="carousel slide carousel-container" data-bs-ride="carousel" @ref="carouselRef">
     <div class="carousel-indicators">
         @for (int i = 0; i < Slides.Count; i++)
         {
@@ -71,4 +70,3 @@
         public bool IsActive { get; set; }
     }
 }
-

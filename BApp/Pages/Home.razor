@@ -1,42 +1,86 @@
 ﻿@page "/home"
-@using BApp.Components.Home
 
-@inject NavigationManager NavigationManager
+@using BApp.Components.Home
+@using BApp.Domain.Models
+@using BApp.Services.Interfaces
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.IdentityModel.Tokens.Jwt
+
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IUserService UserService
+@inject IUserColorService UserColorService
+@inject ILocalStorageService LocalStorage
+
 
 <div class="home-page-container">
-    <h1>Welcome, User!</h1>
-    <div class="carousel-container">
-        <Carousel />
-    </div>
+    <h1>Welcome, @User.Username</h1>
+    @*     <div class="carousel-container">
+    <Carousel />
+    </div> *@
     <div class="user-stats-container">
         <div class="info-card">
             <h2>User XP</h2>
             <div class="progress-bar">
-                <div class="progress" style="width: 50%;"></div>
+                <div class="progress" style="width: @((double)User.UserLevel.CurrentXP / NextLevelXP * 100)%"></div>
             </div>
-            <p>Current XP: 500 / 1000</p>
+            <p>Current XP: @User.UserLevel.CurrentXP / @User.UserLevel.Level.LevelTotalXP</p>
         </div>
         <div class="info-card">
             <h2>Last Color Found</h2>
-            <p>#FF5733</p>
+            <p>@lastUserColorFound.ColorHexValue</p>
         </div>
         <div class="info-card">
             <h2>Most Difficult Color</h2>
-            <p>#123456</p>
+            <p>@mostDifficultColor.ColorHexValue</p>
         </div>
         <div class="info-card">
             <h2>Current Strike</h2>
-            <p>5 Colors</p>
+            <p>@currentStrike Day(s)</p>
         </div>
     </div>
-@*     <div class="redirection-to-scanner" @onclick="RedirectToScanSection">
+    <div class="redirection-to-scanner" @onclick="RedirectToScanSection">
         <p>Go to Scanner</p>
-    </div> *@
+    </div>
 </div>
 
 @code {
+    private User User { get; set; }
+    private UserColor lastUserColorFound { get; set; } = new UserColor() { ColorHexValue = "None" };
+    private UserColor mostDifficultColor { get; set; } = new UserColor() { ColorHexValue = "None" };
+    private int currentStrike { get; set; } = 0;
+
+    private bool ShowModal { get; set; } = false;
+    private int NextLevelXP { get; set; }
+    private bool isAuthenticated { get; set; }
+    private string userAvatarUrl = string.Empty;
+    private int _userId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await LocalStorage.GetItemAsync<string>("token");
+        if (token != null)
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            isAuthenticated = authState.User.Identity.IsAuthenticated;
+
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+            _userId = int.Parse(jwt.Claims.First(c => c.Type == "Id").Value);
+        }
+
+        if (isAuthenticated)
+        {
+            User = await UserService.GetUserById(_userId);
+            NextLevelXP = User.UserLevel.Level.LevelTotalXP;
+
+            lastUserColorFound = await UserColorService.GetLastFoundUserColor(_userId);
+            mostDifficultColor = await UserColorService.GetMostDifficultUserColor(_userId);
+            currentStrike = await UserColorService.GetUserStrike(_userId);
+        }
+    }
     private void RedirectToScanSection()
     {
-        NavigationManager.NavigateTo("/scanner");
+        Navigation.NavigateTo("/scanner");
     }
 }

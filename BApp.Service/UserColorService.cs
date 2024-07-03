@@ -34,6 +34,61 @@ namespace BApp.Services
             return userColorList;
         }
 
+        public async Task<UserColor> GetLastFoundUserColor(int userId)
+        {
+            var mostRecentUserColor = _dbContext.UserColors.Where(uc => uc.UserId == userId).OrderByDescending(uc => uc.SavingDate).FirstOrDefault();
+            return mostRecentUserColor;
+        }
+
+        public async Task<UserColor> GetMostDifficultUserColor(int userId)
+        {
+            var result = _dbContext.UserColors.Where(uc => uc.UserId == userId).OrderByDescending(uc => uc.ColorDifficulty.Status).FirstOrDefault();
+            return result;
+
+        }
+
+        public async Task<int> GetUserStrike(int userId)
+        {
+            var date = DateTime.UtcNow.Date;
+            var strike = 0;
+
+            // Find the record with the matching SavingDate date
+            var todayStrike = _dbContext.UserColors.FirstOrDefault(uc => uc.SavingDate.Date == date);
+            if (todayStrike is not null)
+            {
+                strike += 1;
+            }
+
+            // Get the user colors ordered by SavingDate in descending order
+            var result = _dbContext.UserColors
+                .Where(uc => uc.UserId == userId)
+                .OrderByDescending(uc => uc.SavingDate);
+
+            foreach (var i in result)
+            {
+                var savedDateUtc = i.SavingDate.ToUniversalTime().Date;
+
+                if (savedDateUtc == date.AddDays(-1)) // Compare with the previous date
+                {
+                    strike += 1;
+                    date = savedDateUtc; // Update the date to the current record's date
+                }
+                else if (savedDateUtc == date) // Compare with the same date
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return strike;
+
+        }
+
+
+
         public async Task<UserColor> GetUserColorByHexValueAndUserId(string hexValue, int userId)
         {
             return await _dbContext.UserColors.FirstOrDefaultAsync(uc => uc.ColorHexValue == hexValue && uc.UserId == userId);
@@ -71,7 +126,7 @@ namespace BApp.Services
                 if (currentLevel is not null)
                 {
                     userLevel.CurrentXP += colorXP;
-                    while (userLevel.CurrentXP > currentLevel.LevelTotalXP && currentLevel != null)
+                    while (userLevel.CurrentXP >= currentLevel.LevelTotalXP && currentLevel != null)
                     {
                         userLevel.LevelId += 1;
                         currentLevel = await _dbContext.Levels.FirstOrDefaultAsync(cl => cl.Id == userLevel.LevelId);

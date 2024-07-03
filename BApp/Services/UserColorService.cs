@@ -29,6 +29,19 @@ namespace BApp.Services
             return await _httpClient.GetFromJsonAsync<UserColor>($"UserColors/{hexValue}/{userId}");
         }
 
+        public async Task<UserColor> GetLastFoundUserColor(int userId)
+        {
+            return await _httpClient.GetFromJsonAsync<UserColor>($"UserColors/GetLastFoundUserColor/{userId}");
+        }
+        public async Task<UserColor> GetMostDifficultUserColor(int userId)
+        {
+            return await _httpClient.GetFromJsonAsync<UserColor>($"UserColors/GetMostDifficultUserColor/{userId}");
+        }
+        public async Task<int> GetUserStrike( int userId)
+        {
+            return await _httpClient.GetFromJsonAsync<int>($"UserColors/GetUserStrike/{userId}");
+        }
+
         public async Task AddUserColor(UserColorDTO userColor)
         {
             await _httpClient.PostAsJsonAsync("UserColors", userColor);

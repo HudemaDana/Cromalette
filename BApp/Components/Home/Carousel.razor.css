@@ -1,2 +1,17 @@
-﻿body {
+﻿/* Add to site.css or a relevant CSS file */
+.carousel-container {
+    height: 400px; /* Adjust height as needed */
+}
+
+.carousel-item {
+    height: 100%;
+}
+
+.slide-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: white; /* Ensure text is visible on colored background */
+    text-align: center;
 }

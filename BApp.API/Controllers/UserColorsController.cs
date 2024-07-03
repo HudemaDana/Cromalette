@@ -39,6 +39,51 @@ namespace BApp.API.Controllers
             return Ok(userColor);
         }
 
+        [HttpGet("GetLastFoundUserColor/{userId}")]
+        public async Task<ActionResult<UserColor>> GetLastFoundUserColor(int userId)
+        {
+            try
+            {
+                var mostRecentUserColor = await _userColorService.GetLastFoundUserColor(userId);
+
+                return Ok(mostRecentUserColor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetMostDifficultUserColor/{userId}")]
+        public async Task<ActionResult<UserColor>> GetMostDifficultUserColor(int userId)
+        {
+            try
+            {
+                var mostDifficultUserColor = await _userColorService.GetMostDifficultUserColor(userId);
+
+                return Ok(mostDifficultUserColor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetUserStrike/{userId}")]
+        public async Task<ActionResult<int>> GetUserStrike(int userId)
+        {
+            try
+            {
+              
+                var strike = await _userColorService.GetUserStrike(userId);
+                return Ok(strike);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddUserColor(UserColorDTO userColor)
         {

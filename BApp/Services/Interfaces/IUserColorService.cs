@@ -9,6 +9,9 @@ namespace BApp.Services.Interfaces
         Task<List<UserColor>> GetUserColorsByUserId(int userId);
         Task<UserColor> GetUserColorByHexValueAndUserId(string hexValue, int userId);
         Task AddUserColor(UserColorDTO userColor);
+        Task<UserColor> GetLastFoundUserColor(int userId);
+        Task<UserColor> GetMostDifficultUserColor(int userId);
+        Task<int> GetUserStrike(int userId);
 
     }
 }
